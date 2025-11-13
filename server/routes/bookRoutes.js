@@ -29,6 +29,7 @@ router.post(
 
 router.get("/get-books", protect, getBooks);
 router.get("/:bookId", protect, getBook);
+// router.get("/:bookTitle");
 
 router.put(
   `/:bookId`,

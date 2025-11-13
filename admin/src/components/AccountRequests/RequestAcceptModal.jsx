@@ -7,7 +7,7 @@ const RequestAcceptModal = ({ isOpen, onclick, onclose }) => {
       <div
         className={`w-full h-screen z-[1000000] bg-[rgba(0,0,0,0.4)] flex items-center justify-center absolute inset-0`}
       >
-        <div className="w-full lg:w-[500px] rounded-xl px-10 py-6 relative bg-white flex flex-col items-center justify-center text-center gap-5">
+        <div className="w-full max-w-[470px] rounded-xl px-10 py-6 relative bg-white flex flex-col items-center justify-center text-center gap-3">
           <button
             type="button"
             className="absolute top-5 right-5"
@@ -26,8 +26,8 @@ const RequestAcceptModal = ({ isOpen, onclick, onclose }) => {
             />
           </div>
 
-          <h2 className="text-[20px] font-semibold">Deny Account Request</h2>
-          <p className="secondary-text">
+          <h2 className="text-[20px] font-semibold leading-none mt-2">Deny Account Request</h2>
+          <p className="secondary-text mb-2">
             Denying this request will notify the student they’re not eligible
             due to unsuccessful ID card verification.
           </p>

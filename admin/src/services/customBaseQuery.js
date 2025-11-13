@@ -1,0 +1,71 @@
+// services/customBaseQuery.js
+import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
+import { DEV_BASE_URL } from "../api/api";
+import { enqueueSnackbar } from "notistack";
+
+export const customBaseQuery = async (args, api, extraOptions) => {
+  const rawBaseQuery = fetchBaseQuery({
+    baseUrl: DEV_BASE_URL,
+    prepareHeaders: (headers) => {
+      const token = Cookies.get("adminToken");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  });
+
+  // 👇 Execute the request
+  const result = await rawBaseQuery(args, api, extraOptions);
+
+  console.log(result);
+
+  // 👇 Handle common error scenarios
+  if (result?.error) {
+    const status = result.error?.status;
+    // console.log(status);
+
+    switch (status) {
+      case 401:
+        // Unauthorized → remove token & redirect to login
+        enqueueSnackbar("Session expired. Please log in again.", {
+          variant: "error",
+        });
+        Cookies.remove("adminToken");
+        Cookies.remove("adminData");
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+        break;
+
+      case 403:
+        enqueueSnackbar("You do not have permission.", {
+          variant: "error",
+        });
+        console.warn("Forbidden: You do not have permission.");
+        break;
+
+      case 404:
+        enqueueSnackbar("Oops! Resource not found!", {
+          variant: "error",
+        });
+        console.warn("Resource not found.");
+        break;
+
+      case 500:
+        enqueueSnackbar("Something went wrong!", {
+          variant: "error",
+        });
+        console.error("Server error occurred.");
+        break;
+
+      default:
+        enqueueSnackbar("Something went wrong!", {
+          variant: "error",
+        });
+        console.error("Unhandled API error:", result.error);
+        break;
+    }
+  }
+
+  return result;
+};

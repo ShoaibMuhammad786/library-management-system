@@ -1,4 +1,3 @@
-// services/books/books.service.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../api/api";
 
@@ -22,6 +21,5 @@ export const booksAPi = createApi({
   }),
 });
 
-// ✅ Make sure you're importing from the right place
 export const { useGetBooksQuery, useGetBookByIdQuery, useAddBookMutation } =
   booksAPi;

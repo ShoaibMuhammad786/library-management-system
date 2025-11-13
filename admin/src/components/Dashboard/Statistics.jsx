@@ -23,7 +23,7 @@ const Statistics = () => {
   return (
     <div className="w-full grid grid-cols-3 gap-5">
       {count?.map((c, i) => (
-        <div className="h-[114px] flex flex-col items-start justify-between py-4 px-8 rounded-xl bg-white">
+        <div key={i} className="h-[114px] flex flex-col items-start justify-between py-4 px-8 rounded-xl bg-white">
           <div className="flex items-center gap-3">
             <span className="text-[#64748B] font-medium">{c?.title}</span>
             <span

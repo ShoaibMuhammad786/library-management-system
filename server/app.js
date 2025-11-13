@@ -1,24 +1,23 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const authRoutes = require("./routes/authRoutes");
-const bookRoutes = require("./routes/bookRoutes");
-const userRoutes = require("./routes/userRoutes")
-
+const app = express();
 dotenv.config();
 
-const app = express();
+// routes
+const authRoutes = require("./routes/authRoutes");
+const bookRoutes = require("./routes/bookRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api/auth", authRoutes)
-app.use("/api/users", userRoutes)
-app.use("/api/books", bookRoutes)
-
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/books", bookRoutes);
 
 // Root
 app.get("/", (req, res) => {

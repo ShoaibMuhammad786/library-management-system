@@ -7,14 +7,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { useSignupMutation } from "@/services/authApi";
+import Cookies from "js-cookie";
 
 const validate = (values) => {
   const errors = {};
 
-  if (!values.fullName) {
-    errors.fullName = "Name is required";
-  } else if (values.fullName.length < 3) {
-    errors.fullName = "Name can not be less than 3 characters";
+  if (!values.name) {
+    errors.name = "Name is required";
+  } else if (values.name.length < 3) {
+    errors.name = "Name can not be less than 3 characters";
   }
 
   if (!values.email) {
@@ -41,7 +44,8 @@ const validate = (values) => {
 const RegistrationForm = () => {
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [signup, { isLoading, error }] = useSignupMutation();
 
   const togglePassword = () => {
     setShowPass((prev) => !prev);
@@ -49,17 +53,35 @@ const RegistrationForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
+      name: "",
       email: "",
       idNumber: "",
       password: "",
     },
     validate,
     onSubmit: async (values, { resetForm }) => {
-      console.log("values >>>", values);
-      resetForm();
-
-      router.push("/login");
+      try {
+        const response = await signup({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          idNumber: values.idNumber,
+          role: "student",
+        }).unwrap();
+        console.log("signup response >>> ", response);
+        alert("Account created successfully!");
+        Cookies.set("token", response?.token);
+        Cookies.set("token", JSON.stringify(response?.data));
+        resetForm();
+        router.push("/");
+      } catch (error) {
+        console.log("Err while creating an account >>>>", error);
+        alert(
+          error?.response?.data?.message ||
+            error?.message ||
+            "Something went wrong!"
+        );
+      }
     },
   });
 
@@ -84,21 +106,21 @@ const RegistrationForm = () => {
       </p>
 
       <div className="w-full flex flex-col items-start gap-1 mt-3">
-        <label htmlFor="fullName" className="secondary-text">
+        <label htmlFor="name" className="secondary-text">
           Full name
         </label>
         <input
           type="text"
-          name="fullName"
-          id="fullName"
-          value={formik.values.fullName}
+          name="name"
+          id="name"
+          value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="bg-[#232839] p-3 secondary-text w-full outline-none rounded-md"
           placeholder="adrian@jsmastery.pro"
         />
-        {formik.touched.fullName && formik.errors.fullName ? (
-          <p className="text-red-600 text-sm">{formik.errors.fullName}</p>
+        {formik.touched.name && formik.errors.name ? (
+          <p className="text-red-600 text-sm">{formik.errors.name}</p>
         ) : null}
       </div>
       <div className="w-full flex flex-col items-start gap-1">
@@ -166,7 +188,7 @@ const RegistrationForm = () => {
       </div>
 
       <div className="w-full mt-2">
-        <Button text={"Register"} type={"submit"} loading={loading}/>
+        <Button text={"Register"} type={"submit"} loading={loading} />
       </div>
 
       <p className="secondary-text font-medium text-center mt-2 mx-auto">

@@ -1,10 +1,12 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CiHome } from "react-icons/ci";
 import { LuUsersRound } from "react-icons/lu";
 import { GoBook } from "react-icons/go";
 import { FaPushed } from "react-icons/fa6";
 import { LuUserRound } from "react-icons/lu";
+import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 const links = [
   {
@@ -36,6 +38,14 @@ const links = [
 
 const Sidebar = () => {
   const path = useLocation();
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Cookies.remove("adminData");
+    Cookies.remove("adminToken");
+    navigate("login");
+  };
   return (
     <div className="py-4 w-full h-full px-5 flex flex-col items-start gap-8 relative">
       <div className="w-full flex items-center gap-1">
@@ -62,7 +72,7 @@ const Sidebar = () => {
             >
               <Link
                 to={link?.path}
-                className={`font-medium flex items-center gap-2`}
+                className={`font-medium flex items-center gap-2 outline-none`}
               >
                 <span>{link?.icon}</span>
                 {link?.title}
@@ -72,26 +82,28 @@ const Sidebar = () => {
         })}
       </ul>
 
-      <div className="w-[90%] border rounded-full p-2 flex items-center justify-between absolute bottom-6 left-1/2 -translate-x-1/2">
-        <div className="flex items-center gap-1">
-          <img
-            src="/profile-02.png"
-            alt="profile"
-            className="w-[44px] h-[44px] block rounded-full object-cover"
-          />
-          <div className="flex flex-col items-start gap-[-4px]">
-            <p className="font-medium">Adrian Hajdin</p>
-            <p className="text-sm secondary-text">adrian@jsmastery.pro</p>
+      {user && user?.user && (
+        <div className="w-[90%] border rounded-full p-2 flex items-center justify-between absolute bottom-6 left-1/2 -translate-x-1/2">
+          <div className="flex items-center gap-1">
+            <img
+              src="/profile-02.png"
+              alt="profile"
+              className="w-[44px] h-[44px] block rounded-full object-cover"
+            />
+            <div className="flex flex-col items-start gap-[-4px]">
+              <p className="font-medium text-sm">{user?.user?.name}</p>
+              <p className="text-xs secondary-text">{user?.user?.email}</p>
+            </div>
           </div>
+          <button type="button" onClick={() => handleLogout()}>
+            <img
+              src="/logout-icon.png"
+              alt="logout icon"
+              className="w-[24px] h-[24px]"
+            />
+          </button>
         </div>
-        <button type="button">
-          <img
-            src="/logout-icon.png"
-            alt="logout icon"
-            className="w-[24px] h-[24px]"
-          />
-        </button>
-      </div>
+      )}
     </div>
   );
 };

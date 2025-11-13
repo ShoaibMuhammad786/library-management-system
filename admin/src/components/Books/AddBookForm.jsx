@@ -1,9 +1,27 @@
-import React from "react";
+import { useFormik } from "formik";
 import { GoArrowLeft } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import { addBookFormValidationSchema } from "../../schemas/addBookFormValidationSchema";
 
 const AddBookForm = () => {
   const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      author: "",
+      grenre: "",
+      bookCount: null,
+      bookImage: null,
+      bookVideo: null,
+      bookSummary: "",
+    },
+    validationSchema: addBookFormValidationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values);
+      resetForm();
+    },
+  });
   return (
     <div className="w-full pb-5">
       <div className="">
@@ -60,7 +78,7 @@ const AddBookForm = () => {
             type="tel"
             id="phone"
             className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="123-45-678"
+            placeholder="Science Fiction"
             autoComplete="off"
             pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             required

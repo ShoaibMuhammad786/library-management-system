@@ -11,7 +11,13 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
     password: { type: String, required: true },
-    idNumber: { type: String, required: true, unique: true },
+    idNumber: {
+      type: String,
+      unique: true,
+      required: function () {
+        return this.role === "student";
+      },
+    },
     role: {
       type: String,
       required: true,
@@ -20,6 +26,15 @@ const userSchema = new mongoose.Schema(
     },
     isApproved: { type: Boolean, default: false },
     booksBorrowedCount: { type: Number, default: 0 },
+    booksBorrowed: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Books",
+        required: function () {
+          return this.role === "student";
+        },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -30,6 +45,12 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+// increment the book count
+userSchema.pre("save", function (next) {
+  this.booksBorrowedCount = this.booksBorrowed?.length || 0;
   next();
 });
 

@@ -14,18 +14,18 @@ exports.loginUser = async (req, res) => {
     const data = await authService.login(req.body);
     res.json(data);
   } catch (err) {
-    res.status(401).json({ message: err.message });
+    res.status(400).json({ success: false, message: err.message });
   }
 };
 
-// exports.getUserProfile = async (req, res) => {
-//   try {
-//     const user = await authService.getProfile(req.user.id);
-//     res.json(user);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await authService.getProfile(req.user.id);
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 // exports.getUsers = async (req, res) => {
 //   try {

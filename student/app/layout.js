@@ -2,6 +2,7 @@
 import "./globals.css";
 import Navbar from "@/components/Global/Navbar";
 import { usePathname } from "next/navigation";
+import { Providers } from "../redux/Providers";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       {!isAuthRoute && <Navbar />}
-      <body className={``}>{children}</body>
+      <body className={``}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

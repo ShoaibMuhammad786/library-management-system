@@ -6,16 +6,34 @@ const register = async ({
   email,
   password,
   idNumber,
-  role,
-  isApproved,
+  role = "student", // Default role is 'student', you can pass 'admin' explicitly
+  isApproved = true, // Default 'isApproved' for students, but this can be adjusted for admin
 }) => {
+  // Ensure that email is unique
   const existingUser = await User.findOne({ email });
   if (existingUser) throw new Error("User already exists");
 
-  if (idNumber?.length > 13) {
-    throw new Error("ID number cannot be more than 13 digits.");
+  // Admin-specific logic
+  if (role === "admin") {
+    // Admin doesn't need an ID number or approval status by default
+    if (!idNumber) {
+      // You might want to make sure admins don't have an ID number if it's irrelevant
+      idNumber = null;
+    }
+    // Optionally, you can auto-approve admin accounts or set other defaults
+    isApproved = true; // Admins are typically approved immediately
+  } else if (role === "student") {
+    // Student-specific validation
+    if (!idNumber) throw new Error("ID number is required for students.");
+    if (idNumber?.length > 13) {
+      throw new Error("ID number cannot be more than 13 digits.");
+    }
+
+    const existingId = await User.findOne({ idNumber });
+    if (existingId) throw new Error("ID number is already registered!");
   }
 
+  // Create the user
   const user = await User.create({
     name,
     email,
@@ -26,7 +44,11 @@ const register = async ({
   });
 
   return {
-    message: "User registered successfully",
+    success: true,
+    message: `${
+      role.charAt(0).toUpperCase() + role.slice(1)
+    } registered successfully`,
+
     data: {
       _id: user._id,
       name: user.name,
@@ -42,12 +64,14 @@ const register = async ({
 const login = async ({ email, password }) => {
   const user = await User.findOne({ email });
   if (!user || !(await user.matchPassword(password))) {
-    throw new Error("Invalid credentials");
+    throw new Error("Invalid email or password.");
   }
 
   return {
+    success: true,
+    message: "Login successful",
     data: {
-      _id: user._id,
+      id: user._id,
       name: user.name,
       email: user.email,
       idNumber: user.idNumber,

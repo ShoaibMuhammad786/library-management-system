@@ -1,12 +1,12 @@
-"use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
-import Button from "../Common/Button";
-import Link from "next/link";
-import Image from "next/image";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
+import Button from "../Global/Button";
+import { useLoginMutation } from "../../services/users/authApi";
+import Cookies from "js-cookie";
+import { enqueueSnackbar } from "notistack";
 
 const validate = (values) => {
   const errors = {};
@@ -26,12 +26,11 @@ const validate = (values) => {
 
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const router = useNavigate();
+  const [login, { isLoading, error }] = useLoginMutation();
 
   const togglePassword = () => {
     setShowPass((prev) => !prev);
-    console.log(showPass);
   };
 
   const formik = useFormik({
@@ -41,31 +40,56 @@ const LoginForm = () => {
     },
     validate,
     onSubmit: async (values, { resetForm }) => {
-      resetForm();
-      router.push("/");
+      try {
+        const response = await login({
+          email: values.email,
+          password: values.password,
+          user_type: "admin",
+        }).unwrap();
+
+        console.log("login response >>>", response);
+        if (response?.success) {
+          Cookies.set("adminToken", response?.token);
+          Cookies.set("adminData", JSON.stringify(response?.data));
+          resetForm();
+          router("/");
+        }
+      } catch (error) {
+        enqueueSnackbar(
+          error?.response?.data?.message ||
+            error?.message ||
+            "Something went wrong.",
+          {
+            variant: "error",
+          }
+        );
+        console.log("login error >>> ", error);
+        console.log("login error >>> ", error?.data);
+      }
     },
   });
 
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="w-full lg:w-[80%] flex flex-col items-start justify-center gap-6 py-20"
+      className="w-full lg:w-[80%] max-w-[420px] flex flex-col items-start justify-center gap-4 py-20"
     >
-      <Image
-        src={"/logo.png"}
-        width={172}
-        height={32}
-        className=""
-        alt="logo"
-      />
-      <h1 className="text-[28px] font-semibold leading-8 m-0">
-        Welcome Back to the BookWise
-      </h1>
-      <p className="text-lg leading-6 secondary-text">
-        Access the vast collection of resources, and stay updated
-      </p>
+      <img src={"/logo.png"} className="max-w-[80px]" alt="logo" />
+      <div className="w-full flex flex-col gap-2">
+        <h1 className="text-[28px] font-semibold leading-[1] m-0">
+          Welcome Back to the BookWise
+        </h1>
+        <p className="text-lg leading-[1.2] secondary-text">
+          Access the vast collection of resources, and stay updated
+        </p>
+        {error && (
+          <p className="bg-red-50 text-red-500 px-4 py-3 rounded-lg text-sm mt-3">
+            {error?.data?.message}
+          </p>
+        )}
+      </div>
 
-      <div className="w-full flex flex-col items-start gap-1 mt-3">
+      <div className="w-full flex flex-col items-start gap-1 mt-1">
         <label htmlFor="email" className="secondary-text">
           Email
         </label>
@@ -76,7 +100,7 @@ const LoginForm = () => {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="bg-[#232839] p-3 secondary-text w-full outline-none rounded-md"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
           placeholder="adrian@jsmastery.pro"
         />
         {formik.touched.email && formik.errors.email ? (
@@ -87,7 +111,7 @@ const LoginForm = () => {
         <label htmlFor="password" className="secondary-text">
           Password
         </label>
-        <div className="w-full bg-[#232839] p-3 flex items-center justify-between gap-1.5 rounded-md">
+        <div className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full p-3 flex items-center justify-between">
           <input
             type={showPass ? "text" : "password"}
             name="password"
@@ -111,22 +135,10 @@ const LoginForm = () => {
         ) : null}
       </div>
 
-      <div className="w-full flex justify-end">
-        <Link href={`/login`} className="secondary-text text-sm font-medium">
-          Forgot Password?
-        </Link>
+      <div className="w-full mt-3">
+        <Button text={"Login"} type={"submit"} loading={isLoading} />
+        {/* <button type="submit">Login</button> */}
       </div>
-
-      <div className="w-full">
-        <Button text={"Login"} type={"submit"} loading={loading} />
-      </div>
-
-      <p className="secondary-text font-medium text-center mt-2 mx-auto">
-        Don’t have an account already?{" "}
-        <Link href={"/register"} className="orangeText">
-          Register here
-        </Link>
-      </p>
     </form>
   );
 };
