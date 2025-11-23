@@ -1,19 +1,20 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../api/api";
+import { DEV_BASE_URL } from "../../api/api";
+import { customBaseQuery } from "../customBaseQuery";
 
 export const booksAPi = createApi({
   reducerPath: "booksApi",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: customBaseQuery,
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => "/books",
+      query: () => "/books/get-books",
     }),
     getBookById: builder.query({
       query: (id) => `/books/${id}`,
     }),
     addBook: builder.mutation({
       query: (data) => ({
-        url: `/add-book`,
+        url: `/books/add-book`,
         method: "POST",
         body: data,
       }),

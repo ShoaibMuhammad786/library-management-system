@@ -22,11 +22,10 @@ export const addBookFormValidationSchema = Yup.object({
     .max(1500, "Book count must be less than 1500.")
     .required("Book count is required.")
     .typeError("Book count must be a number."),
-  bookImage: Yup.array()
+  bookImages: Yup.array()
     .min(1, "Upload at least one image.")
     .max(5, "You can upload upto 5 images.")
     .required("Book image is required."),
-  bookVideo: Yup.array().max(1, "You can upload only one video.").nullable(),
   bookSummary: Yup.string()
     .min(30, "Book summary must be at least 30 characters.")
     .max(1000, "Book summary must be less than 1000 characters.")

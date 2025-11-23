@@ -17,20 +17,20 @@ const createBook = async ({
 
   if (existingBook)
     throw new Error(`Book already exists with title ${bookTitle}`);
-  if (genre?.length !== 8) {
+  if (genre?.length < 8) {
     throw new Error("Genre must contain 8 digits");
   } else if (existinGenre) {
     throw new Error(`Book already exists with genre ${existinGenre}`);
   }
 
-  const uploadCoverImage = await cloudinary.uploader.upload(
-    `data:${bookCoverImage.mimetype};base64,${bookCoverImage.buffer.toString(
-      "base64"
-    )}`,
-    {
-      folder: "book_cover_images",
-    }
-  );
+  // const uploadCoverImage = await cloudinary.uploader.upload(
+  //   `data:${bookCoverImage.mimetype};base64,${bookCoverImage.buffer.toString(
+  //     "base64"
+  //   )}`,
+  //   {
+  //     folder: "book_cover_images",
+  //   }
+  // );
 
   const uploadBookImages = await Promise.all(
     bookImages.map(async (img) => {
@@ -49,7 +49,7 @@ const createBook = async ({
     author,
     genre,
     totalBooks,
-    bookCoverImage: uploadCoverImage.secure_url,
+    // bookCoverImage: uploadCoverImage.secure_url,
     bookImages: uploadBookImages,
     bookSummary,
     bookPrimaryColor,
@@ -62,7 +62,7 @@ const createBook = async ({
       author: book.author,
       genre: book.genre,
       totalBooks: book.totalBooks,
-      bookCoverImage: book.bookCoverImage,
+      // bookCoverImage: book.bookCoverImage,
       bookImages: book.bookImages,
       bookSummary: book.bookSummary,
       bookPrimaryColor: book.bookPrimaryColor,

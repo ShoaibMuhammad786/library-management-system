@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "student", "manager"],
       default: "student",
     },
-    isApproved: { type: Boolean, default: false },
+    isAccountApproved: { type: Boolean, default: false },
     booksBorrowedCount: { type: Number, default: 0 },
     booksBorrowed: [
       {

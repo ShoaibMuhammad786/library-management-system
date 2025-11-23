@@ -4,7 +4,6 @@ const BorrowRequests = require("../models/borrowRequests");
 
 exports.addBook = async (req, res) => {
   try {
-    const bookCoverImage = req.files?.bookCoverImage?.[0];
     const bookImages = req.files?.bookImages || [];
     const existingBook = await Books.findOne({ bookTitle: req.body.bookTitle });
     if (existingBook) {
@@ -17,7 +16,6 @@ exports.addBook = async (req, res) => {
 
     const data = await bookService.createBook({
       ...req.body,
-      bookCoverImage,
       bookImages,
     });
     res.status(201).json(data);

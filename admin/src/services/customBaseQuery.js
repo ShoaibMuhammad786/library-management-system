@@ -14,15 +14,10 @@ export const customBaseQuery = async (args, api, extraOptions) => {
     },
   });
 
-  // 👇 Execute the request
   const result = await rawBaseQuery(args, api, extraOptions);
 
-  console.log(result);
-
-  // 👇 Handle common error scenarios
   if (result?.error) {
     const status = result.error?.status;
-    // console.log(status);
 
     switch (status) {
       case 401:
@@ -59,7 +54,7 @@ export const customBaseQuery = async (args, api, extraOptions) => {
         break;
 
       default:
-        enqueueSnackbar("Something went wrong!", {
+        enqueueSnackbar(result?.data?.message || "Something went wrong!", {
           variant: "error",
         });
         console.error("Unhandled API error:", result.error);

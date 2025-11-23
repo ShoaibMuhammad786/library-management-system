@@ -27,6 +27,7 @@ const validate = (values) => {
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
   const router = useNavigate();
+  const [errorMessage, setErrorMessage] = useState(null);
   const [login, { isLoading, error }] = useLoginMutation();
 
   const togglePassword = () => {
@@ -47,7 +48,6 @@ const LoginForm = () => {
           user_type: "admin",
         }).unwrap();
 
-        console.log("login response >>>", response);
         if (response?.success) {
           Cookies.set("adminToken", response?.token);
           Cookies.set("adminData", JSON.stringify(response?.data));
@@ -55,16 +55,12 @@ const LoginForm = () => {
           router("/");
         }
       } catch (error) {
-        enqueueSnackbar(
+        setErrorMessage(
           error?.response?.data?.message ||
+            error?.data?.message ||
             error?.message ||
-            "Something went wrong.",
-          {
-            variant: "error",
-          }
+            "Something went wrong."
         );
-        console.log("login error >>> ", error);
-        console.log("login error >>> ", error?.data);
       }
     },
   });
@@ -82,9 +78,9 @@ const LoginForm = () => {
         <p className="text-lg leading-[1.2] secondary-text">
           Access the vast collection of resources, and stay updated
         </p>
-        {error && (
+        {errorMessage && (
           <p className="bg-red-50 text-red-500 px-4 py-3 rounded-lg text-sm mt-3">
-            {error?.data?.message}
+            {errorMessage}
           </p>
         )}
       </div>

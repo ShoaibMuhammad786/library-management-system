@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../components/Global/Layout";
 import Dashboard from "../pages/dashboard/Dashboard";
@@ -9,26 +8,103 @@ import AccountRequests from "../pages/accountRequests/AccountRequests";
 import BookDetails from "../components/Books/BookDetails";
 import AddBookForm from "../components/Books/AddBookForm";
 import LoginPage from "../pages/auth/login/LoginPage";
+import PublicRoute from "./PublicRoute";
+import PrivateRoute from "./PrivateRoute";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/" element={<Layout page={<Dashboard />} />} />
-      <Route path="/users" element={<Layout page={<Users />} />} />
-      <Route path="/books" element={<Layout page={<Books />} />} />
-      <Route path="/books/add-book" element={<Layout page={<AddBookForm />} />} />
       <Route
-        path="/books/owihoiwrh98r39ry3"
-        element={<Layout page={<BookDetails />} />}
+        path="/login"
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <Users />
+              </PrivateRoute>
+            }
+          />
+        }
+      />
+      <Route
+        path="/books"
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <Books />
+              </PrivateRoute>
+            }
+          />
+        }
+      />
+      <Route
+        path="/books/add-book"
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <AddBookForm />
+              </PrivateRoute>
+            }
+          />
+        }
+      />
+      <Route
+        path="/books/:bookId"
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <BookDetails />
+              </PrivateRoute>
+            }
+          />
+        }
       />
       <Route
         path="/borrow-requests"
-        element={<Layout page={<BorrowRequest />} />}
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <BorrowRequest />
+              </PrivateRoute>
+            }
+          />
+        }
       />
       <Route
         path="/account-requests"
-        element={<Layout page={<AccountRequests />} />}
+        element={
+          <Layout
+            page={
+              <PrivateRoute>
+                <AccountRequests />
+              </PrivateRoute>
+            }
+          />
+        }
       />
     </Routes>
   );

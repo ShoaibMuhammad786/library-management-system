@@ -1,12 +1,16 @@
-import React from "react";
 import { IoCalendarOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
+import { formatDate } from "../../utils/formatDate";
 
-const BookInfo = () => {
+const BookInfo = ({ book }) => {
   return (
-    <div className="w-full mt-5 flex items-start gap-5">
-      <div className="w-[250px] h-[250px] rounded-xl bg-white flex items-center justify-center">
-        <img src="/book01.png" alt="book" className="w-[125px] h-[174px]" />
+    <div className="w-full mt-5 flex items-start gap-5 bg-white p-5 rounded-xl">
+      <div className="w-[250px] h-[250px] rounded-xl bg-gray-50 flex items-center justify-center">
+        <img
+          src={book?.bookImages[0]}
+          alt="book"
+          className="w-[125px] h-[174px] object-cover rounded-lg"
+        />
       </div>
 
       <div className="flex flex-col items-start justify-between gap-6 w-full">
@@ -14,14 +18,14 @@ const BookInfo = () => {
           <p className="secondary-text text-sm">Created at:</p>
           <div className="flex items-center gap-2">
             <IoCalendarOutline className="secondary-text text-base" />
-            <span className="secondary-text text-base">12/01/24</span>
+            <span className="secondary-text text-base">
+              {formatDate(book?.createdAt, { month: "long" })}
+            </span>
           </div>
         </div>
-        <h3 className="text-[24px] font-semibold">
-          Jayne Castle - People in Glass Houses
-        </h3>
-        <h4 className="text-lg font-semibold">By Jayne Ann Krentz</h4>
-        <p className="secondary-text text-sm">Strategic, Fantasy</p>
+        <h3 className="text-[24px] font-semibold">{book?.bookTitle}</h3>
+        <h4 className="text-lg font-semibold">By {book?.author}</h4>
+        <p className="secondary-text text-sm">{book?.genre}</p>
 
         <button
           type="button"

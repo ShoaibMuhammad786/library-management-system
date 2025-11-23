@@ -1,26 +1,42 @@
-import React from "react";
-import { GoArrowLeft } from "react-icons/go";
 import BookInfo from "./BookInfo";
 import BookSummary from "./BookSummary";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetBookByIdQuery } from "../../services/books/books.service";
+import BackButton from "../../components/Global/BackButton";
+import Loader from "../Global/Loader";
+import { useEffect } from "react";
 
 const BookDetails = () => {
   const navigate = useNavigate();
+  const { bookId } = useParams();
+  const { data, error, isLoading, refetch } = useGetBookByIdQuery(bookId, {
+    refetchOnFocus: false,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const handleNavigateBack = () => navigate(-1);
+
+  if (isLoading) return <Loader />;
+
+  if (error) {
+    return (
+      <div className="w-full h-screen flex justify-center text-center pt-10">
+        <h2>Something went wrong.</h2>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full">
+    <div className="w-full min-h-screen">
       <div className="w-full">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="bg-white flex items-center gap-1.5 justify-center text-sm font-medium px-4 py-2 rounded-lg"
-        >
-          <GoArrowLeft className="text-base" />
-          Go back
-        </button>
+        <BackButton onclick={handleNavigateBack} />
       </div>
 
-      <BookInfo />
-      <BookSummary />
+      <BookInfo book={data?.data} />
+      <BookSummary book={data?.data} />
     </div>
   );
 };

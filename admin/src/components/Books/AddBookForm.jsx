@@ -1,161 +1,140 @@
 import { useFormik } from "formik";
-import { GoArrowLeft } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { addBookFormValidationSchema } from "../../schemas/addBookFormValidationSchema";
+import InputField from "../Global/InputField";
+import SummaryField from "../Global/SummaryField";
+import ImageUpload from "../Global/ImageUpload";
+import BackButton from "../Global/BackButton";
+import { useAddBookMutation } from "../../services/books/books.service";
+import UploadedImageList from "./UploadedImageList";
+import { enqueueSnackbar } from "notistack";
 
 const AddBookForm = () => {
   const navigate = useNavigate();
+  const [addBook, { isLoading }] = useAddBookMutation();
 
   const formik = useFormik({
     initialValues: {
       title: "",
       author: "",
       grenre: "",
-      bookCount: null,
-      bookImage: null,
-      bookVideo: null,
+      bookCount: "",
+      bookImages: [],
       bookSummary: "",
     },
     validationSchema: addBookFormValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       console.log(values);
-      resetForm();
+
+      try {
+        const formData = new FormData();
+
+        formData.append("bookTitle", values.title);
+        formData.append("author", values.author);
+        formData.append("genre", values.grenre);
+        formData.append("totalBooks", values.bookCount);
+        formData.append("bookSummary", values.bookSummary);
+
+        values.bookImages.forEach((file) => {
+          formData.append("bookImages", file);
+        });
+
+        const res = await addBook(formData).unwrap();
+        console.log("response >>> ", res);
+
+        resetForm();
+        alert("Book added successfully!");
+      } catch (error) {
+        console.log("Add book error:", error);
+        // enqueueSnackbar(error?.data?.message, { variant: "error" });
+      }
     },
   });
+
+  const handleNavigateBack = () => navigate(-1);
+
+  const removeImage = (index) => {
+    const updatedImages = [...formik.values.bookImages];
+    updatedImages.splice(index, 1);
+
+    formik.setFieldValue("bookImages", updatedImages);
+  };
+
   return (
     <div className="w-full pb-5">
-      <div className="">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="px-4 py-2 rounded-lg bg-white text-sm font-medium flex items-center justify-center gap-1.5"
-        >
-          <GoArrowLeft className="text-lg" /> Go Back
-        </button>
-      </div>
+      <BackButton onclick={handleNavigateBack} />
 
-      <form className="mt-6 w-full lg:w-[70%] flex flex-col items-start gap-5">
-        <div className="w-full">
-          <label
-            for="first_name"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Book Title
-          </label>
-          <input
-            type="text"
-            id="first_name"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="John"
-            autoComplete="off"
-            required
+      <form
+        onSubmit={formik.handleSubmit}
+        className="mt-6 w-full lg:w-[70%] flex flex-col items-start gap-5"
+      >
+        <div className="w-full grid grid-cols-2 gap-5">
+          <InputField
+            labelTitle="Book Title"
+            placeholder="7 Habits Of Highly Effective People"
+            name="title"
+            value={formik.values.title}
+            onchange={formik.handleChange}
+            error={formik.touched.title && formik.errors.title}
           />
-        </div>
-        <div className="w-full">
-          <label
-            for="company"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Author
-          </label>
-          <input
-            type="text"
-            id="company"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="Flowbite"
-            autoComplete="off"
-            required
-          />
-        </div>
-        <div className="w-full">
-          <label
-            for="phone"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Genre
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="Science Fiction"
-            autoComplete="off"
-            pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-            required
-          />
-        </div>
-        <div className="w-full">
-          <label
-            for="website"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Total number of books
-          </label>
-          <input
-            type="url"
-            id="website"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="flowbite.com"
-            autoComplete="off"
-            required
-          />
-        </div>
-        <div className="w-full">
-          <label
-            for="visitors"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Book Image
-          </label>
-          <input
-            type="number"
-            id="visitors"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder=""
-            autoComplete="off"
-            required
-          />
-        </div>
-        <div className="w-full">
-          <label
-            for="email"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Book Video
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="john.doe@company.com"
-            autoComplete="off"
-            required
+
+          <InputField
+            labelTitle="Author"
+            placeholder="Ethan Smith"
+            name="author"
+            value={formik.values.author}
+            onchange={formik.handleChange}
+            error={formik.touched.author && formik.errors.author}
           />
         </div>
 
-        <div className="w-full">
-          <label
-            for="email"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Book Summary
-          </label>
-          <textarea
-            name=""
-            id=""
-            cols="30"
-            rows="10"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-3"
-            placeholder="john.doe@company.com"
-            autoComplete="off"
-          ></textarea>
+        <div className="w-full grid grid-cols-2 gap-5">
+          <InputField
+            labelTitle="Genre"
+            placeholder="Motivation"
+            name="grenre"
+            value={formik.values.grenre}
+            onchange={formik.handleChange}
+            error={formik.touched.grenre && formik.errors.grenre}
+          />
+
+          <InputField
+            labelTitle="Total number of books"
+            placeholder="100"
+            name="bookCount"
+            value={formik.values.bookCount}
+            onchange={formik.handleChange}
+            error={formik.touched.bookCount && formik.errors.bookCount}
+          />
         </div>
+
+        {/* Image Upload */}
+        <ImageUpload
+          onChange={(files) => formik.setFieldValue("bookImages", files)}
+          error={formik.touched.bookImages && formik.errors.bookImages}
+        />
+
+        {/* Uploaded Image Preview List */}
+        <UploadedImageList
+          images={formik.values.bookImages}
+          onRemove={removeImage}
+        />
+
+        <SummaryField
+          labelTitle="Book Summary"
+          placeholder="Write summary here..."
+          name="bookSummary"
+          value={formik.values.bookSummary}
+          onchange={formik.handleChange}
+          error={formik.touched.bookSummary && formik.errors.bookSummary}
+        />
 
         <button
           type="submit"
-          className="text-white primary-bg focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-4 text-center"
+          disabled={isLoading}
+          className="button disabled:opacity-50"
         >
-          Submit
+          {isLoading ? "Adding..." : "Add"}
         </button>
       </form>
     </div>

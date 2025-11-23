@@ -44,7 +44,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     Cookies.remove("adminData");
     Cookies.remove("adminToken");
-    navigate("login");
+    navigate("/login");
   };
   return (
     <div className="py-4 w-full h-full px-5 flex flex-col items-start gap-8 relative">
