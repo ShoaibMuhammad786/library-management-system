@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import RequestAcceptModal from "./RequestAcceptModal";
 import RequestRejectModal from "./RequestRejectModal";
+import { formatDate } from "../../utils/formatDate";
 
-const List = () => {
+const List = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
 
@@ -22,7 +23,7 @@ const List = () => {
 
   return (
     <>
-      <div className="relative overflow-x-auto my-5">
+      <div className="relative overflow-x-auto my-5 min-h-screen">
         <table className="w-full text-sm text-left rtl:text-righ">
           <thead className="text-xs text-[#3A354E] bg-[#F8F8FF]">
             <tr>
@@ -44,26 +45,30 @@ const List = () => {
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6, 7]?.map((user, index) => (
+            {data?.data?.map((user, index) => (
               <tr className="bg-white border-b border-gray-200" key={index}>
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium whitespace-nowrap flex items-center gap-2"
                 >
                   <img
-                    src="/profile01.png"
+                    src={
+                      user?.profilePicture
+                        ? user?.profilePicture
+                        : "/user-profile-picture-placeholder.png"
+                    }
                     alt="profile01"
-                    className="w-[40px] h-[40px]"
+                    className={`w-[40px] h-[40px] rounded-full object-cover`}
                   />
                   <div className="flex flex-col items-start">
-                    <span>Darrell Steward</span>
+                    <span>{user?.name}</span>
                     <span className="secondary-text font-normal">
-                      darrelsteward@gmail.com
+                      {user?.email}
                     </span>
                   </div>
                 </th>
-                <td className="px-6 py-4">Dec 19 2023</td>
-                <td className="px-6 py-4">39849321999</td>
+                <td className="px-6 py-4">{formatDate(user?.createdAt)}</td>
+                <td className="px-6 py-4">{user?.idNumber}</td>
                 <td className="px-6 py-4">
                   <Link to={`/`} className="text-blue-500 font-medium">
                     View Card
@@ -75,14 +80,15 @@ const List = () => {
                     onClick={() => toggleApproveMdal()}
                     className="text-xs text-[#027A48] font-semibold bg-[#027A48]/10 px-3 py-2 rounded-lg"
                   >
-                    Approve Account
+                    Approve
                   </button>
                   <button
                     type="button"
                     onClick={() => toggleModal()}
-                    className="bg-red-100 rounded-full w-6 h-6 p-1"
+                    className="bg-red-100 font-semibold px-3 py-2 rounded-lg text-red-500 text-xs"
                   >
-                    <RxCross2 className="text-base text-red-500 w-full h-full" />
+                    {/* <RxCross2 className="text-base text-red-500 w-full h-full" /> */}
+                    Reject
                   </button>
                 </td>
               </tr>

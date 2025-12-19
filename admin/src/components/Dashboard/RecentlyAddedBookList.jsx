@@ -1,7 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { GoPlus } from "react-icons/go";
-import { IoCalendarOutline, IoEyeOutline } from "react-icons/io5";
+import { IoCalendarOutline } from "react-icons/io5";
 
 const RecentlyAddedBookList = () => {
   return (
@@ -9,22 +8,22 @@ const RecentlyAddedBookList = () => {
       <div className="w-full flex items-center justify-between mb-5">
         <h2 className="text-[20px] font-semibold">Recently Added Books</h2>
         <Link
-          to={"/borrow-requests"}
+          to={"/books?filter=recent"}
           className="text-[#25388C] bg-[#25388C]/10 text-sm font-semibold px-3 py-2 rounded-lg"
         >
           View all
         </Link>
       </div>
 
-      <button
-        type="button"
+      <Link
+        to={`/books/add-book`}
         className="w-full bg-[#F8F8FF] p-4 rounded-xl flex items-center justify-start gap-3"
       >
         <div className="rounded-full bg-white w-[48px] h-[48px] flex items-center justify-center">
           <GoPlus className="text-2xl" />
         </div>
         <span className="text-lg font-medium">Add New Book</span>
-      </button>
+      </Link>
 
       <div className="w-full mt-5 flex flex-col items-start">
         {[1, 2, 3, 4, 5, 6].map((_, i) => {

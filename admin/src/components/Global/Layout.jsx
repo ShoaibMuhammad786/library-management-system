@@ -74,43 +74,43 @@ const Layout = ({ page }) => {
         </div>
       </div>
 
-      {isLoading ? (
+      {/* {isLoading ? (
         <div className="w-full flex justify-center items-center h-screen">
           <p className="">
             <Loader />
           </p>
         </div>
-      ) : (
-        <div className="w-full lg:w-[calc(100%-15rem)] xl:w-[calc(100%-18rem)] h-full  overflow-y-auto overflow-x-hidden">
-          <div className="sticky top-0 left-0 w-full h-24 bg-gray-50 flex items-center justify-between px-4 z-20">
-            <button
-              onClick={() => setisOpen((prev) => !prev)}
-              className="lg:hidden block"
-            >
-              <HiOutlineMenuAlt2 className="text-2xl" />
-            </button>
-            <div className="">
-              <p className="text-2xl font-semibold mb-1.5">
-                Welcome {profile && profile?.name}
-              </p>
-              <p className="secondary-text">
-                Monitor all of your projects and tasks here
-              </p>
-            </div>
-            <div className="flex gap-2 items-center justify-end h-12 rounded-xl border bg-white w-[35%] px-3.5">
-              <IoSearchOutline className="text-xl secondary-text" />
-              <input
-                type="text"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                placeholder="Search users, books by title, author, or genre."
-                className="w-full h-full outline-none text-sm secondary-text"
-              />
-            </div>
+      ) : ( */}
+      <div className="w-full lg:w-[calc(100%-15rem)] xl:w-[calc(100%-18rem)] h-full  overflow-y-auto overflow-x-hidden">
+        <div className="sticky top-0 left-0 w-full h-24 bg-gray-50 flex items-center justify-between px-4 z-20">
+          <button
+            onClick={() => setisOpen((prev) => !prev)}
+            className="lg:hidden block"
+          >
+            <HiOutlineMenuAlt2 className="text-2xl" />
+          </button>
+          <div className="">
+            <p className="text-2xl font-semibold mb-1.5">
+              Welcome {profile && profile?.name}
+            </p>
+            <p className="secondary-text">
+              Monitor all of your projects and tasks here
+            </p>
           </div>
-          <div className="w-full p-4 bg-gray-50">{page}</div>
+          <div className="flex gap-2 items-center justify-end h-12 rounded-xl border bg-white w-[35%] px-3.5">
+            <IoSearchOutline className="text-xl secondary-text" />
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Search users, books by title, author, or genre."
+              className="w-full h-full outline-none text-sm secondary-text"
+            />
+          </div>
         </div>
-      )}
+        <div className="w-full p-4 bg-gray-50">{page}</div>
+      </div>
+      {/* )} */}
     </div>
   );
 };

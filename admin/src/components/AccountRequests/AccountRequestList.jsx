@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GoTrash } from "react-icons/go";
 import { RiEditLine } from "react-icons/ri";
 import List from "./List";
+import { useSearchParams } from "react-router-dom";
+import { useGetUsersQuery } from "../../services/users/authApi";
+import PageLoader from "../Global/PageLoader";
+import ErrorPage from "../Global/ErrorPage";
 
 const AccountRequestList = () => {
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
+  const { data, error, isError, isLoading, refetch } = useGetUsersQuery({
+    search: searchTerm,
+  });
+
+  if (isLoading) return <PageLoader />;
+
+  if (isError) return <ErrorPage />;
   return (
     <div className="w-full bg-white rounded-xl p-6">
       <div className="w-full flex items-center justify-between">
@@ -20,7 +33,15 @@ const AccountRequestList = () => {
         </div>
       </div>
 
-      <List />
+      {data && data?.data?.length > 0 ? (
+        <List data={data} />
+      ) : (
+        <div className="w-full bg-white rounded-xl p-6">
+          <div className="w-full flex items-center justify-center text-center min-h-screen px-4">
+            <p className="text-sm text-gray-500">No users found.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

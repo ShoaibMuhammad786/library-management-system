@@ -11,6 +11,7 @@ const BooksList = () => {
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
   const navigate = useNavigate();
+
   const { data, error, isLoading, refetch } = useGetBooksQuery(
     { search: searchTerm },
     {

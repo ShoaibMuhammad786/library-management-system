@@ -7,7 +7,7 @@ const AccountsRequestedList = () => {
       <div className="w-full flex items-center justify-between">
         <h2 className="text-[20px] font-semibold">Account Requests</h2>
         <Link
-          to={"/borrow-requests"}
+          to={"/account-requests"}
           className="text-[#25388C] bg-[#25388C]/10 text-sm font-semibold px-3 py-2 rounded-lg"
         >
           View all

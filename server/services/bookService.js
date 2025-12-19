@@ -14,6 +14,7 @@ const createBook = async ({
 }) => {
   const existingBook = await Book.findOne({ bookTitle });
   const existinGenre = await Book.findOne({ genre });
+  const booksCount = await Book.find();
 
   if (existingBook)
     throw new Error(`Book already exists with title ${bookTitle}`);
@@ -45,6 +46,7 @@ const createBook = async ({
   );
 
   const book = await Book.create({
+    id: booksCount.length,
     bookTitle,
     author,
     genre,
@@ -58,6 +60,7 @@ const createBook = async ({
   return {
     message: "Book added successfully",
     data: {
+      id: book.id,
       bookTitle: book.bookTitle,
       author: book.author,
       genre: book.genre,
@@ -121,7 +124,7 @@ const editBook = async (
 ) => {
   const book = await Book.findById(bookId);
   if (!book) {
-    throw new Error("Book not found!");
+    return res.status(404).json({ message: "Book no found" });
   }
 
   if (bookTitle) {
@@ -188,6 +191,7 @@ const editBook = async (
   return {
     message: "Book updated successfull",
     data: {
+      id: book?.id,
       bookTitle: book.bookTitle,
       author: book.author,
       genre: book.genre,

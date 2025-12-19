@@ -26,7 +26,9 @@ const RequestRejectModal = ({ isOpen, onclick, onclose }) => {
             />
           </div>
 
-          <h2 className="text-[20px] font-semibold leading-none mt-2">Approve Book Request</h2>
+          <h2 className="text-[20px] font-semibold leading-none mt-2">
+            Approve Account Request
+          </h2>
           <p className="secondary-text mb-2">
             Approve the student’s account request and grant access. A
             confirmation email will be sent upon approval.
