@@ -15,8 +15,6 @@ export const customBaseQuery = async (args, api, extraOptions) => {
 
   const result = await rawBaseQuery(args, api, extraOptions);
 
-  console.log(`result >> `, result);
-
   if (result?.error) {
     const status = result.error?.status;
 

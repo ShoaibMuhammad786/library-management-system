@@ -32,7 +32,9 @@ const BorrowRequestList = () => {
   return (
     <div className="w-full bg-white rounded-xl p-6 min-h-screen">
       <div className="w-full flex items-center justify-between">
-        <h2 className="section-heading">Borrow Book Requests</h2>
+        <h2 className="section-heading">
+          Borrow Book Requests {`(${data && pagination?.total})`}
+        </h2>
         <div className="flex items-center justify-between gap-4">
           {requests?.length > 0 && (
             <div className="flex items-center gap-2">

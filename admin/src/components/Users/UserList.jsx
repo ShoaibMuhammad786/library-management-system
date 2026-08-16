@@ -62,7 +62,9 @@ const UserList = () => {
   return (
     <div className="w-full bg-white min-h-screen rounded-xl p-6">
       <div className="w-full flex items-center justify-between">
-        <h2 className="section-heading">All Users</h2>
+        <h2 className="section-heading">
+          All Users {`(${data && pagination?.total})`}
+        </h2>
       </div>
 
       {users && users?.length > 0 ? (

@@ -23,6 +23,7 @@ const AccountRequestList = () => {
   );
 
   const pagination = data?.pagination;
+  const requests = data?.data;
 
   const updateStatusInUrl = (status) => {
     const params = new URLSearchParams(searchParams);
@@ -36,7 +37,9 @@ const AccountRequestList = () => {
   return (
     <div className="w-full bg-white rounded-xl p-6">
       <div className="w-full flex items-center justify-between">
-        <h2 className="section-heading">Account Registration Requests</h2>
+        <h2 className="section-heading">
+          Account Registration Requests {`(${data && pagination?.total})`}
+        </h2>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <button
@@ -58,8 +61,8 @@ const AccountRequestList = () => {
         </div>
       </div>
 
-      {data && data?.data?.length > 0 ? (
-        <List data={data} refetch={refetch} />
+      {data && requests?.length > 0 ? (
+        <List data={requests} refetch={refetch} />
       ) : (
         <div className="w-full flex flex-col items-center justify-center min-h-[90vh] gap-7">
           <img

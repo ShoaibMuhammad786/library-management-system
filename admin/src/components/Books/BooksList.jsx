@@ -50,7 +50,9 @@ const BooksList = () => {
   return (
     <div className="w-full bg-white rounded-xl p-6 min-h-screen">
       <div className="w-full flex items-center justify-between">
-        <h2 className="section-heading">All Books</h2>
+        <h2 className="section-heading">
+          All Books {`(${data && pagination?.total})`}
+        </h2>
         <div className="flex items-center justify-between gap-4">
           <Link
             to="/books/add-book"

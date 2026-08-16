@@ -77,7 +77,7 @@ const List = ({ data, refetch }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.data?.map((user, index) => (
+            {data?.map((user, index) => (
               <tr
                 className="bg-white whitespace-nowrap border-b border-gray-200"
                 key={index}

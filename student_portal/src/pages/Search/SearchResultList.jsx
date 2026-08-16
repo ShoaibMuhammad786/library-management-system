@@ -20,7 +20,7 @@ const SearchResultList = () => {
     },
     {
       // refetchOnFocus: true,
-      // refetchOnMountOrArgChange: true,
+      refetchOnMountOrArgChange: true,
     },
   );
 
