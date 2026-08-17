@@ -6,7 +6,7 @@ import PageLoader from "../../components/common/PageLoader";
 
 const HomePage = () => {
   const page = 1;
-  const limit = 10;
+  const limit = 12;
   const { data, isLoading, isError, error } = useGetBooksQuery(
     {
       page,
@@ -21,6 +21,7 @@ const HomePage = () => {
 
   const books = data?.data?.books;
   const pagination = data?.data?.pagination;
+  console.log(pagination);
 
   if (isLoading) return <PageLoader />;
 
@@ -39,10 +40,10 @@ const HomePage = () => {
   }
 
   return (
-    <React.Fragment>
+    <main className="w-full relative">
       <Header books={books} />
       {books?.length > 0 && <Listing books={books} />}
-    </React.Fragment>
+    </main>
   );
 };
 

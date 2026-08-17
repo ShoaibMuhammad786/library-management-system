@@ -11,7 +11,10 @@ const BookCard = ({ book }) => {
     });
   };
   return (
-    <div className="w-full relative mx-auto" onClick={() => handleClick(book)}>
+    <div
+      className="w-full relative mx-auto cursor-pointer"
+      onClick={() => handleClick(book)}
+    >
       <div className="w-full max-w-[80%] h-[150px]">
         <img
           src={book?.bookCoverImage}

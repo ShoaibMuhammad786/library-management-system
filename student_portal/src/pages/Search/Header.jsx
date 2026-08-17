@@ -6,7 +6,7 @@ const Header = () => {
       <p className="uppercase text-lg font-semibold">
         Discover Your Next Great Read:
       </p>
-      <h1 className="text-[36px] md:text-[56px] font-semibold leading-[44px] md:leading-[64px] lg:w-[80%] xl:w-[60%] mx-auto">
+      <h1 className="text-[36px] md:text-[36px] lg:text-[56px] font-semibold leading-[1.25] lg:w-[80%] xl:w-[60%] mx-auto">
         Explore and Search for Any Book In Our Library
       </h1>
 

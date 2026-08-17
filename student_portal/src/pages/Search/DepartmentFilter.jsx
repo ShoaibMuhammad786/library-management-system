@@ -9,15 +9,23 @@ const DepartmentFilter = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (department) {
-        setSearchParams({ department });
-      } else {
-        setSearchParams({});
-      }
+      setSearchParams(
+        (prev) => {
+          const params = new URLSearchParams(prev);
+          if (department) {
+            params.set("department", department);
+          } else {
+            params.delete("department");
+          }
+          return params;
+        },
+        { replace: true },
+      );
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [department, setSearchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [department]);
 
   return (
     <div className="w-[212px] h-[38px] bg-[#232839] rounded-[10px] flex items-center justify-center gap-1 px-4">

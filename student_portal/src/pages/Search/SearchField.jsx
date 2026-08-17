@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom"; // Added import
+import useDebounce from "../../hooks/useDebounce";
 
 const SearchField = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [value, setValue] = useState(searchParams.get("q") || "");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [value, setValue] = useState(searchParams.get("search") || "");
+  const debouncedValue = useDebounce(value, 300);
 
   useEffect(() => {
-    setValue(searchParams.get("q") || "");
-  }, [searchParams]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
-      if (value.trim()) params.set("q", value.trim());
-      else params.delete("q");
-
-      navigate(`${location.pathname}?${params.toString()}`);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [value]);
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev);
+        if (debouncedValue) {
+          params.set("search", debouncedValue);
+        } else {
+          params.delete("search");
+        }
+        return params;
+      },
+      { replace: true },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedValue]);
 
   return (
     <div className="w-full lg:w-[80%] xl:w-[60%] mx-auto bg-[#232839] flex items-center gap-3 rounded-[10px] h-[68px] px-4 md:px-6 mt-5">

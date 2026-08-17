@@ -8,18 +8,19 @@ const SearchResultList = () => {
   const page = 1;
   const limit = 10;
   const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get("q") || "";
+
+  // Extract both department and search terms from URL
   const searchDepartment = searchParams.get("department") || "";
+  const searchQuery = searchParams.get("search") || ""; // Added line
 
   const { data, isLoading, isError, error } = useGetBooksQuery(
     {
       page,
       limit,
-      search: searchQuery,
+      search: searchQuery, // Passed the search query string here
       department: searchDepartment,
     },
     {
-      // refetchOnFocus: true,
       refetchOnMountOrArgChange: true,
     },
   );

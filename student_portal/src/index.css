@@ -32,5 +32,5 @@ body {
 }
 
 .padding-x {
-  @apply px-4 md:px-[9%];
+  @apply px-5 md:px-10;
 }

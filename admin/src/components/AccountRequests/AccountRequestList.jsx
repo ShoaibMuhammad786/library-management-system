@@ -22,8 +22,8 @@ const AccountRequestList = () => {
     },
   );
 
-  const pagination = data?.pagination;
   const requests = data?.data;
+  const pagination = data?.pagination;
 
   const updateStatusInUrl = (status) => {
     const params = new URLSearchParams(searchParams);

@@ -26,7 +26,7 @@ const Header = ({ books }) => {
   return (
     <div className="py-10 md:py-20 padding-x flex flex-col-reverse md:flex-row items-center justify-between gap-y-10">
       <div className="w-full lg:w-[55%] flex flex-col items-start gap-5">
-        <h1 className="text-[72px] font-semibold leading-[1]">
+        <h1 className="text-[42px] md:text-[52px] lg:text-[72px] font-semibold leading-[1]">
           {bookDetails?.bookTitle}
         </h1>
         <div className="flex items-center flex-wrap gap-x-8 gap-y-5">
@@ -60,7 +60,7 @@ const Header = ({ books }) => {
         </button>
       </div>
 
-      <div className="relative flex items-center justify-start w-full lg:w-[400px] 2xl:w-[450px]">
+      <div className="relative flex items-center justify-center lg:justify-end w-full lg:w-[400px] 2xl:w-[450px]">
         <img
           src={bookDetails?.bookCoverImage}
           width={276}
