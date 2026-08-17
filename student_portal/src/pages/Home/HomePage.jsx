@@ -21,7 +21,6 @@ const HomePage = () => {
 
   const books = data?.data?.books;
   const pagination = data?.data?.pagination;
-  console.log(pagination);
 
   if (isLoading) return <PageLoader />;
 
@@ -40,10 +39,10 @@ const HomePage = () => {
   }
 
   return (
-    <main className="w-full relative">
+    <React.Fragment>
       <Header books={books} />
       {books?.length > 0 && <Listing books={books} />}
-    </main>
+    </React.Fragment>
   );
 };
 

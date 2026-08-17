@@ -31,13 +31,13 @@ const SearchResultList = () => {
   return (
     <section className="w-full relative padding-x py-10">
       <div className="w-full flex items-center justify-between gap-5 flex-wrap">
-        {searchQuery ? (
+        {/* {searchQuery ? (
           <h2 className="secondary-text font-semibold text-[32px]">
             Search Results
           </h2>
         ) : (
           <div></div>
-        )}
+        )} */}
 
         <DepartmentFilter />
       </div>
