@@ -36,7 +36,9 @@ const BooksList = () => {
     if (!bookId) return;
     try {
       await deleteBook(bookId).unwrap();
-      enqueueSnackbar("Book deleted successfully!", { variant: "success" });
+      enqueueSnackbar("Book has been deleted successfully", {
+        variant: "success",
+      });
       refetch();
       setOpenDeleteBookModal(false);
       setBookId(null);

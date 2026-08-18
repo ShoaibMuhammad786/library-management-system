@@ -1,7 +1,7 @@
 const StudentCard = ({ student }) => {
   return (
     <div
-      className="w-full max-w-[477px] min-h-[245px] relative overflow-hidden p-6 rounded-md"
+      className="w-full min-h-[245px] relative overflow-hidden p-6 rounded-md"
       style={{
         backgroundImage: "url('/id-card-background-image.png')",
         backgroundPosition: "center",

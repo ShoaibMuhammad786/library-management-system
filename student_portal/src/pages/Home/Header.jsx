@@ -1,27 +1,15 @@
 import { useSearchParams } from "react-router-dom";
-import { useRequestBookMutation } from "../../services/bookApi";
-import { enqueueSnackbar } from "notistack";
+import RequestModal from "./RequestModal";
 
 const Header = ({ books }) => {
-  const [requestBook, { isLoading, isError }] = useRequestBookMutation();
   const book = books[0];
   const [searchParams] = useSearchParams();
+
   const bookFromQuery = searchParams.get("book")
     ? searchParams.get("book")
     : null;
 
   const bookDetails = bookFromQuery ? JSON.parse(bookFromQuery) : book;
-
-  const handleBorrowBookRequest = async (bookId) => {
-    try {
-      await requestBook({ bookId }).unwrap();
-      enqueueSnackbar("Request submitted successfully!", {
-        variant: "success",
-      });
-    } catch (error) {
-      // console.log("err while submitting request > ", error);
-    }
-  };
 
   return (
     <div className="py-10 md:py-20 padding-x flex flex-col-reverse md:flex-row items-center justify-between gap-y-10">
@@ -50,14 +38,7 @@ const Header = ({ books }) => {
         <p className="secondary-text text-base lg:text-lg">
           {bookDetails?.bookSummary}
         </p>
-        <button
-          type="button"
-          disabled={bookDetails?.availableBooks === 0 || isLoading}
-          onClick={() => handleBorrowBookRequest(bookDetails?._id)}
-          className="orangeBg rounded-md px-5 py-3 font-semibold text-black text-sm lg:text-lg mt-3 disabled:opacity-65"
-        >
-          Borrow Book Request
-        </button>
+        <RequestModal bookDetails={bookDetails} />
       </div>
 
       <div className="relative flex items-center justify-center lg:justify-end w-full lg:w-[400px] 2xl:w-[450px]">

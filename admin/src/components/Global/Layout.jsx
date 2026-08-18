@@ -55,7 +55,7 @@ const Layout = ({ page }) => {
         </div>
       </div>
 
-      <div className="w-full lg:w-[calc(100%-15rem)] xl:w-[calc(100%-18rem)] h-full  overflow-y-auto overflow-x-hidden">
+      <div className="w-full lg:w-[calc(100%-15rem)] xl:w-[calc(100%-18rem)] h-full overflow-y-auto overflow-x-hidden">
         <div className="sticky top-0 left-0 w-full h-24 bg-gray-50 flex items-center justify-between px-4 z-20">
           <button
             onClick={() => setisOpen((prev) => !prev)}

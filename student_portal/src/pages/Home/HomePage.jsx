@@ -3,10 +3,14 @@ import Header from "./Header";
 import Listing from "./Listing";
 import { useGetBooksQuery } from "../../services/bookApi";
 import PageLoader from "../../components/common/PageLoader";
+import Pagination from "../../components/common/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 const HomePage = () => {
-  const page = 1;
   const limit = 12;
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
   const { data, isLoading, isError, error } = useGetBooksQuery(
     {
       page,
@@ -41,7 +45,12 @@ const HomePage = () => {
   return (
     <React.Fragment>
       <Header books={books} />
+
       {books?.length > 0 && <Listing books={books} />}
+
+      {pagination && pagination.totoalPages > 1 && (
+        <Pagination pagination={pagination} />
+      )}
     </React.Fragment>
   );
 };

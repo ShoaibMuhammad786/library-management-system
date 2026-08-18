@@ -1,16 +1,35 @@
-import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
-const Pagination = () => {
+const Pagination = ({ pagination }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = pagination?.page || 1;
+  const totalPages = pagination?.totalPages || 1;
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+
+    const params = new URLSearchParams(searchParams);
+
+    params.set("page", page);
+
+    setSearchParams(params);
+  };
+
   return (
-    <div className="w-full my-5">
-      <div aria-label="Page navigation example">
+    <div className="w-full mb-12">
+      <div aria-label="Page navigation">
         <ul className="flex items-center justify-end w-full -space-x-px h-10 text-base">
+          {/* Previous */}
           <li>
-            <Link
-              to={`#`}
-              className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-[#232839] border-e-0 border-gray-300 rounded-s-lg"
+            <button
+              type="button"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] rounded-s-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="sr-only">Previous</span>
+
               <svg
                 className="w-3 h-3 rtl:rotate-180"
                 aria-hidden="true"
@@ -20,61 +39,46 @@ const Pagination = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M5 1 1 5l4 4"
                 />
               </svg>
-            </Link>
+            </button>
           </li>
+
+          {/* Page numbers */}
+          {Array.from({ length: totalPages }, (_, index) => {
+            const page = index + 1;
+
+            return (
+              <li key={page}>
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(page)}
+                  className={`flex items-center justify-center px-4 h-10 leading-tight ${
+                    page === currentPage
+                      ? "orangeBg text-white"
+                      : "text-gray-400 bg-[#232839]"
+                  }`}
+                >
+                  {page}
+                </button>
+              </li>
+            );
+          })}
+
+          {/* Next */}
           <li>
-            <Link
-              to={`#`}
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 orangeBg border-gray-300"
-            >
-              1
-            </Link>
-          </li>
-          <li>
-            <Link
-              to={`#`}
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] border-gray-300"
-            >
-              2
-            </Link>
-          </li>
-          <li>
-            <a
-              to={`#`}
-              aria-current="page"
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] border-gray-300"
-            >
-              3
-            </a>
-          </li>
-          <li>
-            <Link
-              to={`#`}
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] border-gray-300"
-            >
-              4
-            </Link>
-          </li>
-          <li>
-            <Link
-              to={`#`}
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] border-gray-300"
-            >
-              5
-            </Link>
-          </li>
-          <li>
-            <Link
-              to={`#`}
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] border-gray-300 rounded-e-lg"
+            <button
+              type="button"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-[#232839] rounded-e-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="sr-only">Next</span>
+
               <svg
                 className="w-3 h-3 rtl:rotate-180"
                 aria-hidden="true"
@@ -84,13 +88,13 @@ const Pagination = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="m1 9 4-4-4-4"
                 />
               </svg>
-            </Link>
+            </button>
           </li>
         </ul>
       </div>

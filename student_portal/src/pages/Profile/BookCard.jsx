@@ -6,15 +6,16 @@ const BookCard = ({ book }) => {
   return (
     <div
       key={book?._id}
-      className="w-full relative bg-[#12141D] flex flex-col items-start gap-2 p-4 rounded-[10px]"
+      className="w-full relative bg-[#12141D] flex flex-col items-start gap-1 p-4 rounded-[10px]"
     >
-      <div className="w-full rounded-[10px] p-4 bg-[#090c15]">
+      {/* bg-[#090c15] */}
+      <div className="w-full rounded-[10px] p-4">
         <img
           src={book?.book?.bookCoverImage}
           width={144}
           height={199}
-          alt="dan-brown-book-image"
-          className="object-contain lg:w-[179px] mx-auto 2xl:w-[159px]"
+          alt={`${book?.book?.bookTitle} cover image`}
+          className="object-contain lg:w-[179px] mx-auto"
         />
       </div>
       <h3 className="font-semibold mt-3 mb-1">

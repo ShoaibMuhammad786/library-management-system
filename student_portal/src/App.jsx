@@ -6,7 +6,7 @@ function App() {
     <>
       <SnackbarProvider
         autoHideDuration={2500}
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        anchorOrigin={{ horizontal: "center", vertical: "top" }}
       />
       <AppRoutes />
     </>
