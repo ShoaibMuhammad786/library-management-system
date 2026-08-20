@@ -1,6 +1,5 @@
 const Book = require("../models/Book");
 const cloudinary = require("../utils/cloudinary");
-const BorrowRequests = require("../models/borrowRequests");
 
 const createBook = async ({
   bookTitle,

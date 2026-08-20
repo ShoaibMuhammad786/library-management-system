@@ -23,8 +23,6 @@ const RecentlyAddedBookList = () => {
     );
   }
 
-  console.log("books >> ", data);
-
   return (
     <div className="w-full bg-white p-5 rounded-xl">
       <div className="w-full flex items-center justify-between mb-5">

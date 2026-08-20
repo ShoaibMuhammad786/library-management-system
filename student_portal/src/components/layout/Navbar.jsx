@@ -1,9 +1,9 @@
-import { TbLogout2 } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { MdMenu } from "react-icons/md";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import LogoutModal from "./LogoutModal";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -32,17 +32,22 @@ const Navbar = () => {
 
         <ul className="hidden md:flex items-center gap-4 md:gap-7 lg:gap-10">
           <li>
-            <Link to={"/"} className="text-lg">
+            <Link to={"/"} className="text-base">
               Home
             </Link>
           </li>
           <li>
-            <Link to={"/search"} className="text-lg">
+            <Link to={"/search"} className="text-base">
               Search
             </Link>
           </li>
           <li>
-            <Link to={"/profile"} className="flex items-center gap-2 text-lg">
+            <Link to={"/requests"} className="text-base">
+              Requests
+            </Link>
+          </li>
+          <li>
+            <Link to={"/profile"} className="flex items-center gap-2 text-base">
               <div className="w-8 h-8 rounded-full bg-blue-300 flex items-center justify-center">
                 <span className="font-semibold text-sm">SM</span>
               </div>
@@ -50,9 +55,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <button type="button" onClick={handleLogout}>
-              <TbLogout2 className="text-red-600 text-xl" />
-            </button>
+            <LogoutModal handleLogout={handleLogout} />
           </li>
         </ul>
 

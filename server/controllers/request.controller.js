@@ -79,6 +79,7 @@ exports.getRequests = async (req, res) => {
   }
 };
 
+// get all borrowed books - admin & student
 exports.getUserBorrowedBooks = async (req, res) => {
   try {
     const user = req.user;

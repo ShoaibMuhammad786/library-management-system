@@ -27,6 +27,10 @@ body {
   @apply bg-[#E7C9A5];
 }
 
+.blueBg {
+  @apply bg-[#232839];
+}
+
 .orangeText {
   @apply text-[#E7C9A5];
 }

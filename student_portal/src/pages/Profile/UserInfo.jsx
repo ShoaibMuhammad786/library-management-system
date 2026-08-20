@@ -4,7 +4,7 @@ import { LiaUserEditSolid } from "react-icons/lia";
 const UserInfo = ({ student, handleToggleEditProfileModal }) => {
   const accountStatus = student?.status;
   return (
-    <div className="w-full bg-[#232839] rounded-[10px] p-8 flex flex-col items-start gap-4 sticky top-10">
+    <div className="w-full blueBg rounded-[10px] p-8 flex flex-col items-start gap-4 sticky top-10">
       <div className="w-full flex items-start md:items-center gap-4 flex-col md:flex-row">
         <div className="w-[100px] h-[100px] relative">
           <img

@@ -6,8 +6,6 @@ const {
   getBooks,
   editBook,
   deleteBook,
-  requestBorrowBook,
-  acceptRejectRequestBorrowBook,
 } = require("../controllers/bookController");
 const protect = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");

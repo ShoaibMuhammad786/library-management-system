@@ -78,6 +78,7 @@ const updateRequestStatus = async (requestId, status) => {
   return updatedRequest;
 };
 
+// get requests
 const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
   const matchStage = {};
   if (status) matchStage.status = status;
@@ -182,6 +183,7 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
   };
 };
 
+// get borrowed books
 const getUserBorrowedBooks = async ({ user, status }) => {
   const query = { user: user._id };
 

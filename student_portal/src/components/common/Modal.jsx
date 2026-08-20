@@ -8,7 +8,6 @@ const Modal = ({
   size = "md",
   showCloseButton = true,
   closeOnOverlayClick = true,
-  Icon,
 }) => {
   // Close modal when Escape is pressed
   useEffect(() => {

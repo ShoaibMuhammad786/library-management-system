@@ -10,14 +10,25 @@ const {
 const verifyAccount = require("../middlewares/accountStatusMiddleware");
 const router = express.Router();
 
-router.get("/", protect, getRequests);
-router.post(`/:bookId`, protect, verifyAccount, requestBorrowBook);
+router.get("/", protect, roleMiddleware("admin", "student"), getRequests);
+router.post(
+  `/:bookId`,
+  protect,
+  verifyAccount,
+  roleMiddleware("student"),
+  requestBorrowBook,
+);
 router.patch(
   `/:requestId/status`,
   protect,
   roleMiddleware("admin"),
   acceptRejectRequestBorrowBook,
 );
-router.get("/borrowed", protect, getUserBorrowedBooks);
+router.get(
+  "/borrowed",
+  protect,
+  roleMiddleware("admin", "student"),
+  getUserBorrowedBooks,
+);
 
 module.exports = router;
