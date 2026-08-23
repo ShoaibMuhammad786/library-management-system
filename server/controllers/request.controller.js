@@ -1,5 +1,4 @@
 const requestService = require("../services/requestService");
-const BorrowRequests = require("../models/borrowRequests");
 
 // request to borrow a book
 exports.requestBorrowBook = async (req, res) => {
@@ -43,7 +42,13 @@ exports.acceptRejectRequestBorrowBook = async (req, res) => {
       return res.status(400).json({ message: "Request status is required" });
     }
 
-    const allowedStatus = ["pending", "borrowed", "returned", "late-return"];
+    const allowedStatus = [
+      "pending",
+      "borrowed",
+      "returned",
+      "late-return",
+      "rejected",
+    ];
     if (!allowedStatus.includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
     }
@@ -64,12 +69,14 @@ exports.acceptRejectRequestBorrowBook = async (req, res) => {
 // get all requests - admin only
 exports.getRequests = async (req, res) => {
   try {
+    const user = req.user;
     const { search, page, limit, status } = req.query;
     const requests = await requestService.getBorrowRequests({
       search,
       page,
       limit,
       status,
+      user,
     });
 
     res.json(requests);
@@ -93,5 +100,38 @@ exports.getUserBorrowedBooks = async (req, res) => {
     res.json(books);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// cancel borrow request - student only
+exports.cancelBorrowRequest = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const requestId = req.params.requestId;
+
+    if (!requestId) {
+      return res.status(400).json({
+        success: false,
+        message: "Request ID is required",
+      });
+    }
+
+    const cancelledRequest = await requestService.cancelBorrowRequest(
+      requestId,
+      userId,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Borrow request cancelled successfully!",
+      data: cancelledRequest,
+    });
+  } catch (error) {
+    console.error("Error cancelling borrow request >>>", error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || "Server error",
+    });
   }
 };

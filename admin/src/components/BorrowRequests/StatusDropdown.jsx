@@ -5,20 +5,39 @@ import { getStatusStyle } from "../../utils/getStatusSatyle";
 
 const REQUESTS_STATUS = [
   { title: "Pending", value: "pending" },
-  { title: "Borrowed", value: "borrowed" },
+  { title: "Accept", value: "borrowed" },
   { title: "Returned", value: "returned" },
   { title: "Late Return", value: "late-return" },
+  { title: "Reject", value: "rejected" },
 ];
 
-const StatusDropdown = ({ defaultValue, requestId }) => {
-  const [selectedStatus, setSelectedStatus] = useState(defaultValue);
+const StatusDropdown = ({ defaultValue, requestId, currentStatus }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const [updateStatus, { isLoading }] = useUpdateRequestStatusMutation();
 
+  const handleToggleDropdown = () => {
+    if (currentStatus === "cancelled") {
+      enqueueSnackbar("This request has been cancelled by the student.", {
+        variant: "error",
+      });
+
+      return;
+    }
+
+    setOpen((prev) => !prev);
+  };
+
   const handleSelect = async (status) => {
-    setSelectedStatus(status);
+    if (status === "cancelled") {
+      enqueueSnackbar("This request has been cancelled by the student.", {
+        variant: "error",
+      });
+
+      return;
+    }
+    // setSelectedStatus(status);
     setOpen(false);
 
     try {
@@ -28,8 +47,6 @@ const StatusDropdown = ({ defaultValue, requestId }) => {
       console.log("Status updated");
     } catch (error) {}
   };
-
-  const currentStatus = REQUESTS_STATUS.find((s) => s.value === selectedStatus);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -45,15 +62,18 @@ const StatusDropdown = ({ defaultValue, requestId }) => {
     };
   }, [open]);
 
+  const formattedStatus =
+    defaultValue.charAt(0).toUpperCase() + defaultValue.slice(1);
+
   return (
     <div className="relative inline-block text-left">
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => handleToggleDropdown()}
         className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
           defaultValue,
         )}`}
       >
-        {defaultValue.charAt(0).toUpperCase() + defaultValue.slice(1)}
+        {formattedStatus === "Borrowed" ? "Accepted" : formattedStatus}
       </button>
 
       {open && (

@@ -6,6 +6,7 @@ const {
   acceptRejectRequestBorrowBook,
   getRequests,
   getUserBorrowedBooks,
+  cancelBorrowRequest,
 } = require("../controllers/request.controller");
 const verifyAccount = require("../middlewares/accountStatusMiddleware");
 const router = express.Router();
@@ -30,5 +31,7 @@ router.get(
   roleMiddleware("admin", "student"),
   getUserBorrowedBooks,
 );
+
+router.patch("/:requestId/cancel", protect, cancelBorrowRequest);
 
 module.exports = router;

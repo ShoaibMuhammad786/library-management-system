@@ -15,9 +15,17 @@ const borrowRequests = new mongoose.Schema(
     returnDate: { type: Date, default: null },
     status: {
       type: String,
-      enum: ["pending", "borrowed", "rejected", "returned", "late-return"],
+      enum: [
+        "pending",
+        "borrowed",
+        "rejected",
+        "returned",
+        "late-return",
+        "cancelled",
+      ],
       default: "pending",
     },
+    cancelledBy: { type: String, default: null },
   },
   { timestamps: true },
 );

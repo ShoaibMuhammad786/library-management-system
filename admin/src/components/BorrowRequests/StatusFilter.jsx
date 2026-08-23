@@ -5,9 +5,11 @@ import { useSearchParams } from "react-router-dom";
 const REQUESTS_STATUS = [
   { title: "All", value: "" },
   { title: "Pending", value: "pending" },
-  { title: "Borrowed", value: "borrowed" },
+  { title: "Accepted", value: "borrowed" },
+  { title: "Rejected", value: "rejected" },
   { title: "Returned", value: "returned" },
   { title: "Late Return", value: "late-return" },
+  { title: "Cancelled", value: "cancelled" },
 ];
 
 const StatusFilter = () => {

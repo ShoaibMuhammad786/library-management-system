@@ -12,7 +12,7 @@ const RequestTable = ({ requests }) => {
               Book
             </th>
             <th scope="col" className="px-6 py-4">
-              User Requested
+              Student
             </th>
             <th scope="col" className="px-6 py-4">
               <StatusFilter />
@@ -47,11 +47,24 @@ const RequestTable = ({ requests }) => {
                 </th>
 
                 <td className="px-6 py-4">
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      {req?.user?.firstName + " " + req?.user?.lastName}
-                    </span>
-                    <span className="secondary-text">{req?.user?.email}</span>
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={
+                        req?.user?.profilePicture
+                          ? req?.user?.profilePicture
+                          : "/user-profile-picture-placeholder.png"
+                      }
+                      alt={`${req?.user?.firstName} ${req?.user?.lastName} profile picture`}
+                      className="w-8 min-w-8 h-8 rounded-full object-cover"
+                    />
+                    <div className="flex flex-col gap-1">
+                      <span className="font-medium leading-none">
+                        {req?.user?.firstName + " " + req?.user?.lastName}
+                      </span>
+                      <span className="secondary-text leading-none">
+                        {req?.user?.email}
+                      </span>
+                    </div>
                   </div>
                 </td>
 
@@ -59,6 +72,7 @@ const RequestTable = ({ requests }) => {
                   <StatusDropdown
                     requestId={req?._id}
                     defaultValue={req?.status}
+                    currentStatus={req?.status}
                   />
                 </td>
 

@@ -79,11 +79,25 @@ const updateRequestStatus = async (requestId, status) => {
 };
 
 // get requests
-const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
+const getBorrowRequests = async ({
+  search,
+  page = 1,
+  limit = 10,
+  status,
+  user,
+}) => {
   const matchStage = {};
-  if (status) matchStage.status = status;
 
-  // ensure numbers
+  // Status filter
+  if (status) {
+    matchStage.status = status;
+  }
+
+  // Students can only see their own requests
+  if (user?.role === "student") {
+    matchStage.user = user._id;
+  }
+
   const pageNumber = parseInt(page, 10) || 1;
   const limitNumber = parseInt(limit, 10) || 10;
   const skip = (pageNumber - 1) * limitNumber;
@@ -92,6 +106,7 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
 
   const pipeline = [
     { $match: matchStage },
+
     {
       $lookup: {
         from: "users",
@@ -100,7 +115,9 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
         as: "user",
       },
     },
+
     { $unwind: "$user" },
+
     {
       $lookup: {
         from: "books",
@@ -109,7 +126,9 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
         as: "book",
       },
     },
+
     { $unwind: "$book" },
+
     ...(searchRegex
       ? [
           {
@@ -124,9 +143,10 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
           },
         ]
       : []),
+
     { $sort: { createdAt: -1 } },
     { $skip: skip },
-    { $limit: limitNumber }, // <-- must be a number
+    { $limit: limitNumber },
   ];
 
   const requests = await BorrowRequests.aggregate(pipeline);
@@ -134,6 +154,7 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
   // Count total for pagination
   const countPipeline = [
     { $match: matchStage },
+
     {
       $lookup: {
         from: "users",
@@ -142,7 +163,9 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
         as: "user",
       },
     },
+
     { $unwind: "$user" },
+
     {
       $lookup: {
         from: "books",
@@ -151,7 +174,9 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
         as: "book",
       },
     },
+
     { $unwind: "$book" },
+
     ...(searchRegex
       ? [
           {
@@ -166,10 +191,12 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
           },
         ]
       : []),
+
     { $count: "total" },
   ];
 
   const totalCountResult = await BorrowRequests.aggregate(countPipeline);
+
   const total = totalCountResult[0]?.total || 0;
 
   return {
@@ -182,9 +209,8 @@ const getBorrowRequests = async ({ search, page = 1, limit = 10, status }) => {
     },
   };
 };
-
 // get borrowed books
-const getUserBorrowedBooks = async ({ user, status }) => {
+const getUserBorrowedBooks = async ({ user, status = "borrowed" }) => {
   const query = { user: user._id };
 
   if (status) {
@@ -199,9 +225,37 @@ const getUserBorrowedBooks = async ({ user, status }) => {
   return data;
 };
 
+// cancel borrow request - student only
+const cancelBorrowRequest = async (requestId, userId) => {
+  const request = await BorrowRequests.findOne({
+    _id: requestId,
+    user: userId,
+  });
+
+  if (!request) {
+    const error = new Error("Borrow request not found!");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Student can only cancel pending requests
+  if (request.status !== "pending") {
+    const error = new Error(`You cannot cancel a ${request.status} request.`);
+    error.statusCode = 400;
+    throw error;
+  }
+
+  request.status = "cancelled";
+
+  await request.save();
+
+  return request;
+};
+
 module.exports = {
   requestBorrowBook,
   updateRequestStatus,
   getBorrowRequests,
   getUserBorrowedBooks,
+  cancelBorrowRequest,
 };

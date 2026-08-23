@@ -12,20 +12,22 @@ const BorrowRequestList = () => {
   const status = searchParams.get("status") || "";
   const page = Number(searchParams.get("page")) || 1;
 
-  const { data, isLoading, isError, refetch } = useGetRequestsQuery({
-    search: search,
-    page: page,
-    limit: 20,
-    skip: 0,
-    status,
-  });
+  const { data, isLoading, isError, refetch, isFetching } = useGetRequestsQuery(
+    {
+      search: search,
+      page: page,
+      limit: 20,
+      skip: 0,
+      status,
+    },
+  );
 
   const requests = data?.data;
   const pagination = data?.pagination;
 
   const isFiltered = search || status;
 
-  if (isLoading) return <PageLoader />;
+  if (isLoading || isFetching) return <PageLoader />;
 
   if (isError) return <ErrorPage refetch={refetch} />;
 

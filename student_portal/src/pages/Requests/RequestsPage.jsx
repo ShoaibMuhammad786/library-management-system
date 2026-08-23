@@ -38,7 +38,11 @@ const RequestsPage = () => {
       <div className="w-full relative">
         <div className="w-full flex items-center justify-between gap-4">
           <h1 className="text-2xl font-semibold">My Requests</h1>
-          <Tabs activeTab={status} handleChangeTab={handleChangeStatus} />
+          <Tabs
+            status={status}
+            setStatus={setStatus}
+            handleChangeTab={handleChangeStatus}
+          />
         </div>
 
         {isLoading || isFetching ? (

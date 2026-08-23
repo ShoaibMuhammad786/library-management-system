@@ -110,11 +110,13 @@ const UserList = () => {
                             : "/user-profile-picture-placeholder.png"
                         }
                         alt="profile01"
-                        className={`w-[40px] h-[40px] rounded-full object-cover`}
+                        className={`w-[35px] h-[35px] rounded-full object-cover`}
                       />
-                      <div className="flex flex-col items-start">
-                        <span>{user?.firstName + " " + user?.lastName}</span>
-                        <span className="secondary-text font-normal">
+                      <div className="flex flex-col items-start gap-1">
+                        <span className="leading-none">
+                          {user?.firstName + " " + user?.lastName}
+                        </span>
+                        <span className="leading-none secondary-text font-normal">
                           {user?.email}
                         </span>
                       </div>

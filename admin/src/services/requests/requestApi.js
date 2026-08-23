@@ -7,7 +7,7 @@ export const requestApi = createApi({
 
   tagTypes: ["Requests"],
 
-  refetchOnFocus: true,
+  refetchOnFocus: false,
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
 

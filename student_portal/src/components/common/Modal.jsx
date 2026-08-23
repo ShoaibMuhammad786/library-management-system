@@ -9,7 +9,6 @@ const Modal = ({
   showCloseButton = true,
   closeOnOverlayClick = true,
 }) => {
-  // Close modal when Escape is pressed
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
@@ -56,11 +55,22 @@ const Modal = ({
       aria-labelledby={title ? "modal-title" : undefined}
     >
       <div
-        className={`relative w-full ${sizeClasses[size]} rounded-xl bg-[#151822] shadow-2xl`}
+        className={`
+          relative
+          flex
+          w-full
+          ${sizeClasses[size]}
+          max-h-[calc(100dvh-2rem)]
+          flex-col
+          overflow-hidden
+          rounded-xl
+          bg-[#151822]
+          shadow-2xl
+        `}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-4 pt-4">
+          <div className="flex shrink-0 items-center justify-between px-4 pt-4">
             {title && (
               <h2 id="modal-title" className="text-lg font-semibold text-white">
                 {title}
@@ -93,7 +103,9 @@ const Modal = ({
         )}
 
         {/* Content */}
-        <div className="px-6 pb-10 pt-0">{children}</div>
+        <div className="min-h-0 overflow-y-auto px-6 pb-10 pt-0">
+          {children}
+        </div>
       </div>
     </div>
   );

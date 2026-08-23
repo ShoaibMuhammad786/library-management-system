@@ -1,26 +1,13 @@
-import { useState } from "react";
 import Modal from "../../components/common/Modal";
-import { useRequestBookMutation } from "../../services/bookApi";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
-import { enqueueSnackbar } from "notistack";
 
-const RequestModal = ({ bookDetails }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [requestBook, { isLoading, isError }] = useRequestBookMutation();
-
-  const handleBorrowBookRequest = async (bookId) => {
-    try {
-      await requestBook({ bookId }).unwrap();
-      enqueueSnackbar("Request submitted successfully!", {
-        variant: "success",
-      });
-    } catch (error) {
-      // console.log("err while submitting request > ", error);
-    } finally {
-      setIsModalOpen(false);
-    }
-  };
+const RequestModal = ({
+  bookDetails,
+  handleBorrowBookRequest,
+  isModalOpen,
+  setIsModalOpen,
+  isLoading,
+}) => {
   return (
     <>
       <button

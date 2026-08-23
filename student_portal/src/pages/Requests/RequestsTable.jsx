@@ -1,20 +1,8 @@
-import { useState } from "react";
 import { formateDate } from "../../utils/formateDate";
 import getStatusStyles from "../../utils/getStatusStyles";
 import BookDetailsModal from "./BookDetailsModal";
 
 const RequestsTable = ({ requests }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState(null);
-
-  const handleViewRequest = (request) => {
-    setSelectedRequest(request);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedRequest(null);
-  };
-
   return (
     <div className="w-full overflow-x-auto mt-8">
       <table className="w-full min-w-[700px] text-left text-sm">
@@ -24,7 +12,7 @@ const RequestsTable = ({ requests }) => {
             <th className="px-6 py-4 font-semibold">Date Requested</th>
             <th className="px-6 py-4 font-semibold">Status</th>
             <th className="px-6 py-4 font-semibold">Updated At</th>
-            {/* <th className="px-6 py-4 font-semibold">Action</th> */}
+            <th className="px-6 py-4 font-semibold">Action</th>
           </tr>
         </thead>
 
@@ -60,26 +48,18 @@ const RequestsTable = ({ requests }) => {
                   {formateDate(req?.createdAt)}
                 </td>
 
-                {/* <td className="px-6 py-4">
-                  <button
-                    type="button"
-                    onClick={() => handleViewRequest(req)}
-                    className="font-medium orangeText"
-                  >
-                    View
-                  </button>
-                </td> */}
+                <td className="px-6 py-4">
+                  {req?.status === "pending" ? (
+                    <BookDetailsModal requestId={req?._id} />
+                  ) : (
+                    "___"
+                  )}
+                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-
-      <BookDetailsModal
-        request={selectedRequest}
-        isModalOpen={!!selectedRequest}
-        onClose={handleCloseModal}
-      />
     </div>
   );
 };

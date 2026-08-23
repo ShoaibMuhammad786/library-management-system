@@ -4,17 +4,9 @@ import UserInfo from "./UserInfo";
 import PageLoader from "../../components/common/PageLoader";
 import EditProfileModal from "./EditProfileModal";
 import { useState } from "react";
-import Tabs from "../Requests/Tabs";
-import RequestsList from "./RequestsList";
 
 const ProfilePage = () => {
-  const [activeTab, setActiveTab] = useState("borrowed-books");
-
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
-
-  const handleChangeTab = (tab) => {
-    setActiveTab(tab);
-  };
 
   const { data, isLoading, isError, error } = useGetProfileQuery(undefined, {
     refetchOnFocus: false,

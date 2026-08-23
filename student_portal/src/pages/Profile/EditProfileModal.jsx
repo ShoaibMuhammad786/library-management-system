@@ -40,18 +40,18 @@ const EditProfileModal = ({ toggleModal, data }) => {
       department: data?.department || "",
     },
     validationSchema: editProfileSchema,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       try {
         const formData = new FormData();
 
-        // ✅ append text fields
+        // append text fields
         Object.keys(values).forEach((key) => {
           if (values[key]) {
             formData.append(key, values[key]);
           }
         });
 
-        // ✅ append file
+        // append file
         if (file) {
           formData.append("profileImage", file);
         }

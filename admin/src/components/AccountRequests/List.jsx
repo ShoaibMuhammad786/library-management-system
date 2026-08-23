@@ -128,7 +128,7 @@ const List = ({ data, refetch }) => {
                   {user?.status.charAt(0).toUpperCase() + user?.status.slice(1)}
                 </td>
                 {/* actions */}
-                <td className="pr-6 text-center space-x-3">
+                <td className=" text-start space-x-3">
                   <button
                     type="button"
                     onClick={() => {

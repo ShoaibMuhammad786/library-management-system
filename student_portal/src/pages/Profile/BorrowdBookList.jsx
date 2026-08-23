@@ -1,12 +1,10 @@
 import { useGetBorrowedBooksQuery } from "../../services/bookApi";
 import BookCard from "./BookCard";
-import PageLoader from "../../components/common/PageLoader";
 
 const BorrowdBookList = () => {
   const { data, isLoading, isError } = useGetBorrowedBooksQuery(undefined);
   if (isError) return;
 
-  // if (isLoading) return <PageLoader />;
   return (
     <div className="w-full">
       <h2 className="secondary-text font-semibold text-[32px]">
@@ -20,7 +18,7 @@ const BorrowdBookList = () => {
           })}
         </div>
       ) : (
-        <div className="w-full pt-3">
+        <div className="w-full pt-6">
           <p className="secondary-text">You have not borrowed a book yet.</p>
         </div>
       )}

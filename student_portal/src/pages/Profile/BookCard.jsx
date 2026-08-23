@@ -27,7 +27,10 @@ const BookCard = ({ book }) => {
       ) : (
         <p className="text-sm text-gray-400 font-medium flex items-center gap-1">
           <IoBookOutline />
-          <span>Borrowed on {formateDate(book?.borrowedDate)}</span>
+          <span>
+            {book?.borrowedDate ? "Borrowed on" : "Borrowed"}{" "}
+            {formateDate(book?.borrowedDate)}
+          </span>
         </p>
       )}
       {/* <p className="text-sm text-gray-400 font-medium flex items-center gap-1">

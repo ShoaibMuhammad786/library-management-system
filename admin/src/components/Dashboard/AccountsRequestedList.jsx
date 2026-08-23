@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useGetUsersQuery } from "../../services/users/authApi";
 
@@ -6,10 +5,12 @@ const AccountsRequestedList = () => {
   const { data, isError, isLoading, refetch } = useGetUsersQuery(
     {
       status: "pending",
-      limit: 6,
+      limit: 5,
     },
     {
-      refetchOnFocus: true,
+      refetchOnFocus: false,
+      refetchOnReconnect: true,
+      refetchOnMountOrArgChange: true,
     },
   );
 

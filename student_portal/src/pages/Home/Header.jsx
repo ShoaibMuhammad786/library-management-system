@@ -1,15 +1,34 @@
 import { useSearchParams } from "react-router-dom";
 import RequestModal from "./RequestModal";
+import { useRequestBookMutation } from "../../services/bookApi";
+import { enqueueSnackbar } from "notistack";
+import { useState } from "react";
 
 const Header = ({ books }) => {
   const book = books[0];
   const [searchParams] = useSearchParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const bookFromQuery = searchParams.get("book")
     ? searchParams.get("book")
     : null;
 
   const bookDetails = bookFromQuery ? JSON.parse(bookFromQuery) : book;
+
+  const [requestBook, { isLoading, isError }] = useRequestBookMutation();
+
+  const handleBorrowBookRequest = async (bookId) => {
+    try {
+      await requestBook({ bookId }).unwrap();
+      enqueueSnackbar("Request submitted successfully!", {
+        variant: "success",
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsModalOpen(false);
+    }
+  };
 
   return (
     <div className="py-10 md:py-20 padding-x flex flex-col-reverse md:flex-row items-center justify-between gap-y-10">
@@ -38,7 +57,13 @@ const Header = ({ books }) => {
         <p className="secondary-text text-base lg:text-lg">
           {bookDetails?.bookSummary}
         </p>
-        <RequestModal bookDetails={bookDetails} />
+        <RequestModal
+          bookDetails={bookDetails}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          isLoading={isLoading}
+          handleBorrowBookRequest={handleBorrowBookRequest}
+        />
       </div>
 
       <div className="relative flex items-center justify-center lg:justify-end w-full lg:w-[400px] 2xl:w-[450px]">

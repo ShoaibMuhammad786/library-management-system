@@ -1,34 +1,55 @@
-const Tabs = ({ activeTab, handleChangeTab }) => {
+const tabStatus = [
+  // {
+  //   title: "All",
+  //   key: "all",
+  // },
+  {
+    title: "Pending",
+    key: "pending",
+  },
+  {
+    title: "Borrowed",
+    key: "borrowed",
+  },
+  {
+    title: "Returned",
+    key: "returned",
+  },
+  {
+    title: "Late Returned",
+    key: "late-returned",
+  },
+  {
+    title: "Rejected",
+    key: "rejected",
+  },
+  {
+    title: "Cancelled",
+    key: "cancelled",
+  },
+];
+
+const Tabs = ({ status, setStatus }) => {
   return (
-    <div className={"w-full max-w-[35%] grid grid-cols-4 gap-3"}>
-      <button
-        type="button"
-        onClick={() => handleChangeTab("all")}
-        className={`p-2 rounded-md text-sm font-medium ${activeTab === "all" ? "orangeBg text-black" : "blueBg"}`}
+    <div className={"w-full max-w-[20%] flex justify-end"}>
+      <select
+        name="requestStatus"
+        id="requestStatus"
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+        className="text-gray-100 px-4 py-1 min-w-[150px] outline-none blueBg"
       >
-        All
-      </button>
-      <button
-        type="button"
-        onClick={() => handleChangeTab("accepted")}
-        className={`p-2 rounded-md text-sm font-medium ${activeTab === "accepted" ? "orangeBg text-black" : "blueBg"}`}
-      >
-        Accepted
-      </button>
-      <button
-        type="button"
-        onClick={() => handleChangeTab("pending")}
-        className={`p-2 rounded-md text-sm font-medium ${activeTab === "pending" ? "orangeBg text-black" : "blueBg"}`}
-      >
-        Pending
-      </button>
-      <button
-        type="button"
-        onClick={() => handleChangeTab("rejected")}
-        className={`p-2 rounded-md text-sm font-medium ${activeTab === "rejected" ? "orangeBg text-black" : "blueBg"}`}
-      >
-        Rejected
-      </button>
+        <option value="all" selected>
+          All
+        </option>
+        {tabStatus.map((tb) => {
+          return (
+            <option value={tb.key} key={tb.key} className="text-gray-100">
+              {tb.title}
+            </option>
+          );
+        })}
+      </select>
     </div>
   );
 };

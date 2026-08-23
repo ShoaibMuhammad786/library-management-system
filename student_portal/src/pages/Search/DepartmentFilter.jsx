@@ -24,22 +24,20 @@ const DepartmentFilter = () => {
     }, 500);
 
     return () => clearTimeout(handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [department]);
 
   return (
-    <div className="w-[212px] h-[38px] bg-[#232839] rounded-[10px] flex items-center justify-center gap-1 px-4">
+    <div className="w-[250px] h-[38px] bg-[#232839] rounded-[8px] flex items-center justify-center gap-1 px-4">
       <label htmlFor="department" className="text-gray-400 whitespace-nowrap">
-        Filter by:
+        Filter By Genre:
       </label>
 
       <select
         id="department"
         value={department}
         onChange={(e) => setDepartment(e.target.value)}
-        className="outline-none bg-[#232839] text-white w-full"
+        className="outline-none bg-[#232839] text-white min-w-[100px]"
       >
-        <option value="">Genre</option>
         <option value="">All</option>
         <option value="fiction">Fiction</option>
         <option value="history">History</option>

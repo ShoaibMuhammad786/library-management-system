@@ -5,11 +5,12 @@ export const requestApi = createApi({
   reducerPath: "requestApi",
   baseQuery,
   tagTypes: ["Requests"],
+
   endpoints: (builder) => ({
-    // get requests query (pagination + limit + search)
+    // Get requests (pagination + limit + search + status)
     getRequests: builder.query({
       query: ({ page, limit, search, status }) => ({
-        url: `/requests`,
+        url: "/requests",
         params: {
           page,
           limit,
@@ -17,9 +18,24 @@ export const requestApi = createApi({
           ...(search && { search }),
         },
       }),
+
       providesTags: ["Requests"],
+
+      // Cache data for 5 minutes
+      keepUnusedDataFor: 300,
+    }),
+
+    // Cancel borrow request
+    cancelRequest: builder.mutation({
+      query: (requestId) => ({
+        url: `/requests/${requestId}/cancel`,
+        method: "PATCH",
+      }),
+
+      // Refetch getRequests after successful cancellation
+      invalidatesTags: ["Requests"],
     }),
   }),
 });
 
-export const { useGetRequestsQuery } = requestApi;
+export const { useGetRequestsQuery, useCancelRequestMutation } = requestApi;
