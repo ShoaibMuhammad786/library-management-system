@@ -3,8 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import RequestModal from "../Home/RequestModal";
 import { useRequestBookMutation } from "../../services/bookApi";
 import { enqueueSnackbar } from "notistack";
+import { useState } from "react";
 
 const BookModal = ({ isModalOpen, setIsModalOpen }) => {
+  const [confirmationModal, setConfirmationModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const bookDetails = searchParams.get("book")
@@ -19,6 +21,8 @@ const BookModal = ({ isModalOpen, setIsModalOpen }) => {
       enqueueSnackbar("Request submitted successfully!", {
         variant: "success",
       });
+      setIsModalOpen(false);
+      setConfirmationModal(false);
     } catch (error) {
       console.log(error);
     } finally {
@@ -33,6 +37,7 @@ const BookModal = ({ isModalOpen, setIsModalOpen }) => {
       return params;
     });
     setIsModalOpen(false);
+    setConfirmationModal(false);
   };
 
   return (
@@ -75,8 +80,8 @@ const BookModal = ({ isModalOpen, setIsModalOpen }) => {
             <RequestModal
               bookDetails={bookDetails}
               handleBorrowBookRequest={handleBorrowBookRequest}
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
+              isModalOpen={confirmationModal}
+              setIsModalOpen={setConfirmationModal}
               isLoading={isLoading}
             />
           </div>

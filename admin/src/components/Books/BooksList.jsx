@@ -47,7 +47,7 @@ const BooksList = () => {
 
   if (error) return <ErrorPage />;
 
-  if (isDeleting) return <RequestLoader />;
+  // if (isDeleting) return <RequestLoader />;
 
   return (
     <div className="w-full bg-white rounded-xl p-6 min-h-screen">

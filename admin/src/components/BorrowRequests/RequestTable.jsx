@@ -39,7 +39,7 @@ const RequestTable = ({ requests }) => {
                   <img
                     src={req?.book?.bookCoverImage}
                     alt="book01"
-                    className="w-auto max-h-[40px]"
+                    className="w-auto max-h-[40px] rounded-md"
                   />
                   <div>
                     <span>{req?.book?.bookTitle}</span>
@@ -58,10 +58,10 @@ const RequestTable = ({ requests }) => {
                       className="w-8 min-w-8 h-8 rounded-full object-cover"
                     />
                     <div className="flex flex-col gap-1">
-                      <span className="font-medium leading-none">
+                      <span className="font-medium leading-none whitespace-nowrap">
                         {req?.user?.firstName + " " + req?.user?.lastName}
                       </span>
-                      <span className="secondary-text leading-none">
+                      <span className="secondary-text leading-none whitespace-nowrap">
                         {req?.user?.email}
                       </span>
                     </div>

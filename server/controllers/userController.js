@@ -131,7 +131,7 @@ exports.approveUserProfile = async (req, res) => {
       `Account ${status}`,
       `
       <h2>Your account has been approved!</h2>
-    <p>You can now log in to your account.</p>
+      <p>You can now submit requests to borrow books.</p>
     `,
     );
 

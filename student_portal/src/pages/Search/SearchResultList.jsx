@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const SearchResultList = () => {
   const limit = 12;
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchDepartment = searchParams.get("department") || "";
@@ -19,9 +19,9 @@ const SearchResultList = () => {
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
       params.set("book", JSON.stringify(book));
-      setIsModalOpen(true);
       return params;
     });
+    setOpenDetailsModal(true);
   };
 
   const { data, isLoading, isFetching, isError, error } = useGetBooksQuery(
@@ -95,10 +95,10 @@ const SearchResultList = () => {
         <Pagination pagination={pagination} />
       )}
 
-      {isModalOpen && (
+      {openDetailsModal && (
         <BookModal
-          isModalOpen={setIsModalOpen}
-          setIsModalOpen={setIsModalOpen}
+          isModalOpen={openDetailsModal}
+          setIsModalOpen={setOpenDetailsModal}
         />
       )}
     </section>

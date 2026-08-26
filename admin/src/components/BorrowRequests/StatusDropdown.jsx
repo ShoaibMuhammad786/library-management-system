@@ -30,19 +30,13 @@ const StatusDropdown = ({ defaultValue, requestId, currentStatus }) => {
   };
 
   const handleSelect = async (status) => {
-    if (status === "cancelled") {
-      enqueueSnackbar("This request has been cancelled by the student.", {
-        variant: "error",
-      });
-
-      return;
-    }
-    // setSelectedStatus(status);
     setOpen(false);
 
     try {
       await updateStatus({ requestId, status }).unwrap();
-      enqueueSnackbar("Request status updated", { variant: "success" });
+      enqueueSnackbar("Request status has been updated", {
+        variant: "success",
+      });
 
       console.log("Status updated");
     } catch (error) {}

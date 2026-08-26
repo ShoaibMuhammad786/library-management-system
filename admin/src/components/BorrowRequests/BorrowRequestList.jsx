@@ -27,7 +27,7 @@ const BorrowRequestList = () => {
 
   const isFiltered = search || status;
 
-  if (isLoading || isFetching) return <PageLoader />;
+  if (isLoading) return <PageLoader />;
 
   if (isError) return <ErrorPage refetch={refetch} />;
 

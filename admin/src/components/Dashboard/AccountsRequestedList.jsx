@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetUsersQuery } from "../../services/users/authApi";
 
 const AccountsRequestedList = () => {
+  const navigate = useNavigate();
   const { data, isError, isLoading, refetch } = useGetUsersQuery(
     {
       status: "pending",
@@ -41,7 +42,8 @@ const AccountsRequestedList = () => {
             data?.data.map((user, i) => {
               return (
                 <div
-                  className="w-full bg-[#F8F8FF] flex flex-col items-center justify-center gap-2 text-center rounded-xl p-5 max-h-[140px]"
+                  onClick={() => navigate("/account-requests?status=pending")}
+                  className="w-full bg-[#F8F8FF] flex flex-col items-center justify-center gap-2 text-center rounded-xl p-5 max-h-[140px] cursor-pointer"
                   key={i}
                 >
                   <img

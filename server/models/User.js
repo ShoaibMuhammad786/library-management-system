@@ -46,7 +46,14 @@ const userSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "pending",
-      enum: ["pending", "accepted", "rejected", "deleted"],
+      enum: [
+        "pending",
+        "accepted",
+        "rejected",
+        "deleted",
+        "blocked",
+        "suspended",
+      ],
     },
     booksBorrowedCount: { type: Number, default: 0 },
     booksBorrowed: [

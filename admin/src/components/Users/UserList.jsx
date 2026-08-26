@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { GoTrash } from "react-icons/go";
 import {
   useDeleteUserAccountMutation,
   useGetUsersQuery,
@@ -10,8 +9,10 @@ import PageLoader from "../Global/PageLoader";
 import ErrorPage from "../Global/ErrorPage";
 import UserCard from "./UserCard";
 import { enqueueSnackbar } from "notistack";
-import RequestLoader from "../Global/RequestLoader";
 import Pagination from "../Global/Pagination";
+import { HiDotsVertical } from "react-icons/hi";
+import Actions from "./Actions";
+import ConfirmationModal from "./ConfirmationModal";
 
 const UserList = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +20,24 @@ const UserList = () => {
   const [deleteUserAccount] = useDeleteUserAccountMutation();
   const [deletingUser, setDeletingUser] = useState(false);
   const page = Number(searchParams.get("page") || 1);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [blockUserModal, setBlockUserModal] = useState(false);
+  const [confirmationAction, setConfirmationAction] = useState(null);
+
+  const handleOpenConfirmation = (action, selectedUser) => {
+    setUser(selectedUser);
+    setConfirmationAction(action);
+    setOpenDropdown(null);
+  };
+
+  const handleCloseConfirmation = () => {
+    setConfirmationAction(null);
+    setUser(null);
+  };
+
+  const handleToggleDropdown = (userId) => {
+    setOpenDropdown((prev) => (prev === userId ? null : userId));
+  };
 
   const { data, isError, isLoading, refetch } = useGetUsersQuery(
     {
@@ -59,6 +78,42 @@ const UserList = () => {
     }
   };
 
+  const handleBlockUser = async (userId) => {
+    if (!userId) return;
+
+    try {
+      console.log("Blocking user:", userId);
+
+      // await blockUser({ userId }).unwrap();
+
+      enqueueSnackbar("User blocked successfully.", {
+        variant: "success",
+      });
+
+      handleCloseConfirmation();
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+  };
+
+  const handleSuspendUser = async (userId) => {
+    if (!userId) return;
+
+    try {
+      console.log("Suspending user:", userId);
+
+      // await suspendUser({ userId }).unwrap();
+
+      enqueueSnackbar("User suspended successfully.", {
+        variant: "success",
+      });
+
+      handleCloseConfirmation();
+    } catch (error) {
+      console.error("Error suspending user:", error);
+    }
+  };
+
   return (
     <div className="w-full bg-white min-h-screen rounded-xl p-6">
       <div className="w-full flex items-center justify-between">
@@ -85,10 +140,7 @@ const UserList = () => {
                   Books Borrowed
                 </th>
                 <th scope="col" className="px-6 py-4">
-                  ID
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  ID Card
+                  University ID
                 </th>
                 <th scope="col" className="px-6 py-4">
                   Action
@@ -131,26 +183,17 @@ const UserList = () => {
                     </td>
                     <td className="px-6 py-4">{user?.booksBorrowedCount}</td>
                     <td className="px-6 py-4">{user?.idNumber}</td>
-                    <td className="px-6 py-4">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setShowUSerCard((prev) => !prev);
-                          setUser(user);
-                        }}
-                        className="text-blue-500 font-medium whitespace-nowrap"
-                      >
-                        View Card
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        type="button"
-                        onClick={() => deleteUser(user?._id)}
-                        className="outline-none"
-                      >
-                        <GoTrash className="text-base text-red-500" />
-                      </button>
+
+                    <td className="px-6 py-4 text-center relative">
+                      <Actions
+                        openDropdown={openDropdown}
+                        setOpenDropdown={setOpenDropdown}
+                        user={user}
+                        setUser={setUser}
+                        setShowUSerCard={setShowUSerCard}
+                        handleToggleDropdown={handleToggleDropdown}
+                        onAction={handleOpenConfirmation}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -187,7 +230,34 @@ const UserList = () => {
         />
       )}
 
-      {deletingUser && <RequestLoader />}
+      <ConfirmationModal
+        isOpen={Boolean(confirmationAction)}
+        onClose={handleCloseConfirmation}
+        onConfirm={() => {
+          if (confirmationAction === "block") {
+            handleBlockUser(user?._id);
+          }
+
+          if (confirmationAction === "suspend") {
+            handleSuspendUser(user?._id);
+          }
+        }}
+        isLoading={false}
+        title={confirmationAction === "block" ? "Block User" : "Suspend User"}
+        description={
+          confirmationAction === "block"
+            ? `Are you sure you want to block ${user?.firstName} ${user?.lastName}?`
+            : `Are you sure you want to suspend ${user?.firstName} ${user?.lastName}?`
+        }
+        confirmText={
+          confirmationAction === "block" ? "Yes, Block" : "Yes, Suspend"
+        }
+        loadingText={
+          confirmationAction === "block" ? "Blocking..." : "Suspending..."
+        }
+      />
+
+      {/* {deletingUser && <RequestLoader />} */}
     </div>
   );
 };
